@@ -1,0 +1,760 @@
+Script started on 2026-09-12 06:34:49+00:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="169" LINES="22"]
+ _____                             _ 
+|  __ \                           | |
+| |__) |   _ _ __  _ __   ___   __| |
+|  _  / | | | '_ \| '_ \ / _ \ / _` |
+| | \ \ |_| | | | | |_) | (_) | (_| |
+|_|  \_\__,_|_| |_| .__/ \___/ \__,_|
+                  | |                
+                  |_|                
+For detailed documentation and guides, please visit:
+[1;34mhttps://docs.runpod.io/[0m and [1;34mhttps://blog.runpod.io/[0m
+
+
+[?2004h]0;root@e558df44a973: /root@e558df44a973:/# [7mcd /workspace/VideoLLaMA2[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccd /workspace/VideoLLaMA2
+[?2004l[?2004h]0;root@e558df44a973: /workspace/VideoLLaMA2root@e558df44a973:/workspace/VideoLLaMA2# [7mcd /workspace/VideoLLaMA2[27m
+[7mpip install -r requirements.txt 2>&1 | tee pip_log.txt[27m[Acd /workspace/VideoLLaMA2
+pip install -r requirements.txt 2>&1 | tee pip_log.txt
+[?2004lLooking in indexes: https://pypi.org/simple, https://download.pytorch.org/whl/cu118
+Collecting torch==2.2.0 (from -r requirements.txt (line 3))
+  Using cached https://download-r2.pytorch.org/whl/cu118/torch-2.2.0%2Bcu118-cp312-cp312-linux_x86_64.whl (811.6 MB)
+Collecting torchvision==0.17.0 (from -r requirements.txt (line 4))
+  Using cached https://download-r2.pytorch.org/whl/cu118/torchvision-0.17.0%2Bcu118-cp312-cp312-linux_x86_64.whl (6.2 MB)
+Collecting transformers==4.40.0 (from -r requirements.txt (line 5))
+  Using cached transformers-4.40.0-py3-none-any.whl.metadata (137 kB)
+Collecting tokenizers==0.19.1 (from -r requirements.txt (line 6))
+  Using cached tokenizers-0.19.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.7 kB)
+Collecting deepspeed==0.13.1 (from -r requirements.txt (line 7))
+  Using cached deepspeed-0.13.1.tar.gz (1.3 MB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting accelerate==0.26.1 (from -r requirements.txt (line 8))
+  Using cached accelerate-0.26.1-py3-none-any.whl.metadata (18 kB)
+Collecting peft==0.4.0 (from -r requirements.txt (line 9))
+  Using cached peft-0.4.0-py3-none-any.whl.metadata (21 kB)
+Collecting timm==1.0.3 (from -r requirements.txt (line 10))
+  Using cached timm-1.0.3-py3-none-any.whl.metadata (43 kB)
+Collecting numpy==1.24.4 (from -r requirements.txt (line 11))
+  Using cached numpy-1.24.4.tar.gz (10.9 MB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'error'
+  error: subprocess-exited-with-error
+  
+  × Getting requirements to build wheel did not run successfully.
+  │ exit code: 1
+  ╰─> [33 lines of output]
+      Traceback (most recent call last):
+        File "/usr/local/lib/python3.12/dist-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+          main()
+        File "/usr/local/lib/python3.12/dist-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+          json_out["return_val"] = hook(**hook_input["kwargs"])
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/usr/local/lib/python3.12/dist-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 137, in get_requires_for_build_wheel
+          backend = _build_backend()
+                    ^^^^^^^^^^^^^^^^
+        File "/usr/local/lib/python3.12/dist-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 70, in _build_backend
+          obj = import_module(mod_path)
+                ^^^^^^^^^^^^^^^^^^^^^^^
+        File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+          return _bootstrap._gcd_import(name[level:], package, level)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+        File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+        File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
+        File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+        File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+        File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+        File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+        File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+        File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+        File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+        File "/tmp/pip-build-env-_u6cq4it/overlay/local/lib/python3.12/dist-packages/setuptools/__init__.py", line 16, in <module>
+          import setuptools.version
+        File "/tmp/pip-build-env-_u6cq4it/overlay/local/lib/python3.12/dist-packages/setuptools/version.py", line 1, in <module>
+          import pkg_resources
+        File "/tmp/pip-build-env-_u6cq4it/overlay/local/lib/python3.12/dist-packages/pkg_resources/__init__.py", line 2172, in <module>
+          register_finder(pkgutil.ImpImporter, find_on_path)
+                          ^^^^^^^^^^^^^^^^^^^
+      AttributeError: module 'pkgutil' has no attribute 'ImpImporter'. Did you mean: 'zipimporter'?
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: subprocess-exited-with-error
+
+× Getting requirements to build wheel did not run successfully.
+│ exit code: 1
+╰─> See above for output.
+
+note: This error originates from a subprocess, and is likely not a problem with pip.
+[?2004h]0;root@e558df44a973: /workspace/VideoLLaMA2root@e558df44a973:/workspace/VideoLLaMA2# [7mpip install "numpy>=1.26,<2.0" && pip install -r requirements.txt 2>&1 | tee pip_log.txt[27m
+[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpip install "numpy>=1.26,<2.0" && pip install -r requirements.txt 2>&1 | tee pip_log.txt
+[A
+[?2004lCollecting numpy<2.0,>=1.26
+  Using cached numpy-1.26.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (61 kB)
+Using cached numpy-1.26.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (18.0 MB)
+Installing collected packages: numpy
+  Attempting uninstall: numpy
+    Found existing installation: numpy 2.1.2
+    Uninstalling numpy-2.1.2:
+      Successfully uninstalled numpy-2.1.2
+Successfully installed numpy-1.26.4
+Looking in indexes: https://pypi.org/simple, https://download.pytorch.org/whl/cu118
+Collecting torch==2.2.0 (from -r requirements.txt (line 3))
+  Using cached https://download-r2.pytorch.org/whl/cu118/torch-2.2.0%2Bcu118-cp312-cp312-linux_x86_64.whl (811.6 MB)
+Collecting torchvision==0.17.0 (from -r requirements.txt (line 4))
+  Using cached https://download-r2.pytorch.org/whl/cu118/torchvision-0.17.0%2Bcu118-cp312-cp312-linux_x86_64.whl (6.2 MB)
+Collecting transformers==4.40.0 (from -r requirements.txt (line 5))
+  Using cached transformers-4.40.0-py3-none-any.whl.metadata (137 kB)
+Collecting tokenizers==0.19.1 (from -r requirements.txt (line 6))
+  Using cached tokenizers-0.19.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.7 kB)
+Collecting deepspeed==0.13.1 (from -r requirements.txt (line 7))
+  Using cached deepspeed-0.13.1.tar.gz (1.3 MB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting accelerate==0.26.1 (from -r requirements.txt (line 8))
+  Using cached accelerate-0.26.1-py3-none-any.whl.metadata (18 kB)
+Collecting peft==0.4.0 (from -r requirements.txt (line 9))
+  Using cached peft-0.4.0-py3-none-any.whl.metadata (21 kB)
+Collecting timm==1.0.3 (from -r requirements.txt (line 10))
+  Using cached timm-1.0.3-py3-none-any.whl.metadata (43 kB)
+Collecting numpy==1.24.4 (from -r requirements.txt (line 11))
+  Using cached numpy-1.24.4.tar.gz (10.9 MB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'error'
+  error: subprocess-exited-with-error
+  
+  × Getting requirements to build wheel did not run successfully.
+  │ exit code: 1
+  ╰─> [33 lines of output]
+      Traceback (most recent call last):
+        File "/usr/local/lib/python3.12/dist-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+          main()
+        File "/usr/local/lib/python3.12/dist-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+          json_out["return_val"] = hook(**hook_input["kwargs"])
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/usr/local/lib/python3.12/dist-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 137, in get_requires_for_build_wheel
+          backend = _build_backend()
+                    ^^^^^^^^^^^^^^^^
+        File "/usr/local/lib/python3.12/dist-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 70, in _build_backend
+          obj = import_module(mod_path)
+                ^^^^^^^^^^^^^^^^^^^^^^^
+        File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+          return _bootstrap._gcd_import(name[level:], package, level)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+        File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+        File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
+        File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+        File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+        File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+        File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+        File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+        File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+        File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+        File "/tmp/pip-build-env-hliad79o/overlay/local/lib/python3.12/dist-packages/setuptools/__init__.py", line 16, in <module>
+          import setuptools.version
+        File "/tmp/pip-build-env-hliad79o/overlay/local/lib/python3.12/dist-packages/setuptools/version.py", line 1, in <module>
+          import pkg_resources
+        File "/tmp/pip-build-env-hliad79o/overlay/local/lib/python3.12/dist-packages/pkg_resources/__init__.py", line 2172, in <module>
+          register_finder(pkgutil.ImpImporter, find_on_path)
+                          ^^^^^^^^^^^^^^^^^^^
+      AttributeError: module 'pkgutil' has no attribute 'ImpImporter'. Did you mean: 'zipimporter'?
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: subprocess-exited-with-error
+
+× Getting requirements to build wheel did not run successfully.
+│ exit code: 1
+╰─> See above for output.
+
+note: This error originates from a subprocess, and is likely not a problem with pip.
+[?2004h]0;root@e558df44a973: /workspace/VideoLLaMA2root@e558df44a973:/workspace/VideoLLaMA2# [7mgrep -v "^numpy" requirements.txt | pip install -r /dev/stdin 2>&1 | tee pip_log.txt[27m
+[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cgrep -v "^numpy" requirements.txt | pip install -r /dev/stdin 2>&1 | tee pip_log.txt
+[A
+[?2004lLooking in indexes: https://pypi.org/simple, https://download.pytorch.org/whl/cu118
+Collecting torch==2.2.0 (from -r /dev/stdin (line 3))
+  Using cached https://download-r2.pytorch.org/whl/cu118/torch-2.2.0%2Bcu118-cp312-cp312-linux_x86_64.whl (811.6 MB)
+Collecting torchvision==0.17.0 (from -r /dev/stdin (line 4))
+  Using cached https://download-r2.pytorch.org/whl/cu118/torchvision-0.17.0%2Bcu118-cp312-cp312-linux_x86_64.whl (6.2 MB)
+Collecting transformers==4.40.0 (from -r /dev/stdin (line 5))
+  Using cached transformers-4.40.0-py3-none-any.whl.metadata (137 kB)
+Collecting tokenizers==0.19.1 (from -r /dev/stdin (line 6))
+  Using cached tokenizers-0.19.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.7 kB)
+Collecting deepspeed==0.13.1 (from -r /dev/stdin (line 7))
+  Using cached deepspeed-0.13.1.tar.gz (1.3 MB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting accelerate==0.26.1 (from -r /dev/stdin (line 8))
+  Using cached accelerate-0.26.1-py3-none-any.whl.metadata (18 kB)
+Collecting peft==0.4.0 (from -r /dev/stdin (line 9))
+  Using cached peft-0.4.0-py3-none-any.whl.metadata (21 kB)
+Collecting timm==1.0.3 (from -r /dev/stdin (line 10))
+  Using cached timm-1.0.3-py3-none-any.whl.metadata (43 kB)
+Collecting decord==0.6.0 (from -r /dev/stdin (line 12))
+  Using cached decord-0.6.0-py3-none-manylinux2010_x86_64.whl.metadata (422 bytes)
+Collecting imageio==2.34.0 (from -r /dev/stdin (line 13))
+  Using cached imageio-2.34.0-py3-none-any.whl.metadata (4.9 kB)
+Collecting imageio-ffmpeg==0.4.9 (from -r /dev/stdin (line 14))
+  Using cached imageio_ffmpeg-0.4.9-py3-none-manylinux2010_x86_64.whl.metadata (1.7 kB)
+Collecting moviepy==1.0.3 (from -r /dev/stdin (line 15))
+  Downloading moviepy-1.0.3.tar.gz (388 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting opencv-python==4.6.0.66 (from -r /dev/stdin (line 16))
+  Using cached opencv_python-4.6.0.66-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (18 kB)
+Collecting pysubs2 (from -r /dev/stdin (line 17))
+  Downloading pysubs2-1.9.0-py3-none-any.whl.metadata (4.3 kB)
+Collecting scikit-learn==1.2.2 (from -r /dev/stdin (line 19))
+  Downloading scikit-learn-1.2.2.tar.gz (7.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.3/7.3 MB 19.5 MB/s  0:00:00
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting huggingface_hub==0.23.4 (from -r /dev/stdin (line 20))
+  Using cached huggingface_hub-0.23.4-py3-none-any.whl.metadata (12 kB)
+Collecting sentencepiece==0.1.99 (from -r /dev/stdin (line 21))
+  Downloading sentencepiece-0.1.99.tar.gz (2.6 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.6/2.6 MB 12.8 MB/s  0:00:00
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting shortuuid (from -r /dev/stdin (line 22))
+  Downloading shortuuid-1.0.13-py3-none-any.whl.metadata (5.8 kB)
+Collecting einops==0.6.1 (from -r /dev/stdin (line 23))
+  Using cached einops-0.6.1-py3-none-any.whl.metadata (12 kB)
+Collecting einops-exts==0.0.4 (from -r /dev/stdin (line 24))
+  Downloading einops_exts-0.0.4-py3-none-any.whl.metadata (621 bytes)
+Collecting bitsandbytes==0.43.0 (from -r /dev/stdin (line 25))
+  Using cached bitsandbytes-0.43.0-py3-none-manylinux_2_24_x86_64.whl.metadata (1.8 kB)
+Collecting pydantic>=2.0 (from -r /dev/stdin (line 26))
+  Downloading pydantic-2.13.5-py3-none-any.whl.metadata (110 kB)
+Collecting gradio==3.50.0 (from -r /dev/stdin (line 28))
+  Downloading gradio-3.50.0-py3-none-any.whl.metadata (17 kB)
+Collecting gradio_client==0.6.1 (from -r /dev/stdin (line 29))
+  Downloading gradio_client-0.6.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting httpx==0.24.1 (from -r /dev/stdin (line 30))
+  Downloading httpx-0.24.1-py3-none-any.whl.metadata (7.4 kB)
+Requirement already satisfied: requests in /usr/local/lib/python3.12/dist-packages (from -r /dev/stdin (line 31)) (2.32.5)
+Collecting openai (from -r /dev/stdin (line 32))
+  Downloading openai-3.13.0-py3-none-any.whl.metadata (41 kB)
+Collecting uvicorn (from -r /dev/stdin (line 33))
+  Downloading uvicorn-0.52.4-py3-none-any.whl.metadata (6.6 kB)
+Collecting fastapi (from -r /dev/stdin (line 34))
+  Downloading fastapi-0.141.1-py3-none-any.whl.metadata (27 kB)
+Collecting tensorboard (from -r /dev/stdin (line 35))
+  Downloading tensorboard-2.21.0-py3-none-any.whl.metadata (1.8 kB)
+Collecting wandb (from -r /dev/stdin (line 36))
+  Downloading wandb-0.30.0-py3-none-manylinux_2_28_x86_64.whl.metadata (11 kB)
+Collecting tabulate (from -r /dev/stdin (line 37))
+  Downloading tabulate-0.10.0-py3-none-any.whl.metadata (40 kB)
+Collecting spaces==0.29.2 (from -r /dev/stdin (line 38))
+  Downloading spaces-0.29.2-py3-none-any.whl.metadata (1.0 kB)
+Collecting markdown2[all] (from -r /dev/stdin (line 27))
+  Downloading markdown2-2.5.5-py3-none-any.whl.metadata (2.1 kB)
+Requirement already satisfied: filelock in /usr/local/lib/python3.12/dist-packages (from torch==2.2.0->-r /dev/stdin (line 3)) (3.20.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in /usr/local/lib/python3.12/dist-packages (from torch==2.2.0->-r /dev/stdin (line 3)) (4.15.0)
+Requirement already satisfied: sympy in /usr/local/lib/python3.12/dist-packages (from torch==2.2.0->-r /dev/stdin (line 3)) (1.13.3)
+Requirement already satisfied: networkx in /usr/local/lib/python3.12/dist-packages (from torch==2.2.0->-r /dev/stdin (line 3)) (3.3)
+Requirement already satisfied: jinja2 in /usr/local/lib/python3.12/dist-packages (from torch==2.2.0->-r /dev/stdin (line 3)) (3.1.6)
+Requirement already satisfied: fsspec in /usr/local/lib/python3.12/dist-packages (from torch==2.2.0->-r /dev/stdin (line 3)) (2024.6.1)
+Collecting nvidia-cuda-nvrtc-cu11==11.8.89 (from torch==2.2.0->-r /dev/stdin (line 3))
+  Downloading nvidia_cuda_nvrtc_cu11-11.8.89-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cuda-runtime-cu11==11.8.89 (from torch==2.2.0->-r /dev/stdin (line 3))
+  Downloading nvidia_cuda_runtime_cu11-11.8.89-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cuda-cupti-cu11==11.8.87 (from torch==2.2.0->-r /dev/stdin (line 3))
+  Downloading nvidia_cuda_cupti_cu11-11.8.87-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cudnn-cu11==8.7.0.84 (from torch==2.2.0->-r /dev/stdin (line 3))
+  Downloading https://download.pytorch.org/whl/cu118/nvidia_cudnn_cu11-8.7.0.84-py3-none-manylinux1_x86_64.whl (728.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 728.5/728.5 MB 56.8 MB/s  0:00:09
+Collecting nvidia-cublas-cu11==11.11.3.6 (from torch==2.2.0->-r /dev/stdin (line 3))
+  Downloading nvidia_cublas_cu11-11.11.3.6-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cufft-cu11==10.9.0.58 (from torch==2.2.0->-r /dev/stdin (line 3))
+  Downloading nvidia_cufft_cu11-10.9.0.58-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-curand-cu11==10.3.0.86 (from torch==2.2.0->-r /dev/stdin (line 3))
+  Downloading nvidia_curand_cu11-10.3.0.86-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cusolver-cu11==11.4.1.48 (from torch==2.2.0->-r /dev/stdin (line 3))
+  Downloading nvidia_cusolver_cu11-11.4.1.48-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cusparse-cu11==11.7.5.86 (from torch==2.2.0->-r /dev/stdin (line 3))
+  Downloading nvidia_cusparse_cu11-11.7.5.86-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-nccl-cu11==2.19.3 (from torch==2.2.0->-r /dev/stdin (line 3))
+  Downloading https://download.pytorch.org/whl/cu118/nvidia_nccl_cu11-2.19.3-py3-none-manylinux1_x86_64.whl (135.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.3/135.3 MB 77.0 MB/s  0:00:01
+Collecting nvidia-nvtx-cu11==11.8.86 (from torch==2.2.0->-r /dev/stdin (line 3))
+  Downloading nvidia_nvtx_cu11-11.8.86-py3-none-manylinux2014_x86_64.whl.metadata (1.7 kB)
+Requirement already satisfied: numpy in /usr/local/lib/python3.12/dist-packages (from torchvision==0.17.0->-r /dev/stdin (line 4)) (1.26.4)
+Requirement already satisfied: pillow!=8.3.*,>=5.3.0 in /usr/local/lib/python3.12/dist-packages (from torchvision==0.17.0->-r /dev/stdin (line 4)) (11.0.0)
+Requirement already satisfied: packaging>=20.0 in /usr/local/lib/python3.12/dist-packages (from transformers==4.40.0->-r /dev/stdin (line 5)) (25.0)
+Requirement already satisfied: pyyaml>=5.1 in /usr/local/lib/python3.12/dist-packages (from transformers==4.40.0->-r /dev/stdin (line 5)) (6.0.3)
+Collecting regex!=2019.12.17 (from transformers==4.40.0->-r /dev/stdin (line 5))
+  Using cached regex-2026.9.10-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+Collecting safetensors>=0.4.1 (from transformers==4.40.0->-r /dev/stdin (line 5))
+  Using cached safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.2 kB)
+Collecting tqdm>=4.27 (from transformers==4.40.0->-r /dev/stdin (line 5))
+  Using cached tqdm-4.70.1-py3-none-any.whl.metadata (57 kB)
+Collecting hjson (from deepspeed==0.13.1->-r /dev/stdin (line 7))
+  Downloading hjson-3.1.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting ninja (from deepspeed==0.13.1->-r /dev/stdin (line 7))
+  Using cached ninja-1.13.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (5.4 kB)
+Requirement already satisfied: psutil in /usr/local/lib/python3.12/dist-packages (from deepspeed==0.13.1->-r /dev/stdin (line 7)) (7.1.0)
+Collecting py-cpuinfo (from deepspeed==0.13.1->-r /dev/stdin (line 7))
+  Downloading py_cpuinfo-9.0.0-py3-none-any.whl.metadata (794 bytes)
+Collecting pynvml (from deepspeed==0.13.1->-r /dev/stdin (line 7))
+  Downloading pynvml-13.0.1-py3-none-any.whl.metadata (5.6 kB)
+Requirement already satisfied: setuptools in /usr/local/lib/python3.12/dist-packages (from imageio-ffmpeg==0.4.9->-r /dev/stdin (line 14)) (80.9.0)
+Collecting decorator<5.0,>=4.0.2 (from moviepy==1.0.3->-r /dev/stdin (line 15))
+  Downloading decorator-4.4.2-py2.py3-none-any.whl.metadata (4.2 kB)
+Collecting proglog<=1.0.0 (from moviepy==1.0.3->-r /dev/stdin (line 15))
+  Downloading proglog-0.1.12-py3-none-any.whl.metadata (794 bytes)
+Collecting scipy>=1.3.2 (from scikit-learn==1.2.2->-r /dev/stdin (line 19))
+  Using cached scipy-1.18.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+Collecting joblib>=1.1.1 (from scikit-learn==1.2.2->-r /dev/stdin (line 19))
+  Downloading joblib-1.6.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting threadpoolctl>=2.0.0 (from scikit-learn==1.2.2->-r /dev/stdin (line 19))
+  Downloading threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
+Collecting aiofiles<24.0,>=22.0 (from gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading aiofiles-23.2.1-py3-none-any.whl.metadata (9.7 kB)
+Collecting altair<6.0,>=4.2.0 (from gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading altair-5.5.0-py3-none-any.whl.metadata (11 kB)
+Collecting ffmpy (from gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading ffmpy-1.0.0-py3-none-any.whl.metadata (3.0 kB)
+Collecting importlib-resources<7.0,>=1.3 (from gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading importlib_resources-6.5.2-py3-none-any.whl.metadata (3.9 kB)
+Collecting markupsafe~=2.0 (from gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading https://download.pytorch.org/whl/MarkupSafe-2.1.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (28 kB)
+Collecting matplotlib~=3.0 (from gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading matplotlib-3.11.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (80 kB)
+Collecting orjson~=3.0 (from gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading orjson-3.12.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (41 kB)
+Collecting pandas<3.0,>=1.0 (from gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading pandas-2.3.3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (91 kB)
+Collecting pillow!=8.3.*,>=5.3.0 (from torchvision==0.17.0->-r /dev/stdin (line 4))
+  Downloading pillow-10.4.0-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (9.2 kB)
+Collecting pydub (from gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading pydub-0.25.1-py2.py3-none-any.whl.metadata (1.4 kB)
+Collecting python-multipart (from gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading python_multipart-0.0.32-py3-none-any.whl.metadata (2.1 kB)
+Collecting semantic-version~=2.0 (from gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading semantic_version-2.10.0-py2.py3-none-any.whl.metadata (9.7 kB)
+Collecting websockets<12.0,>=10.0 (from gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading websockets-11.0.3-py3-none-any.whl.metadata (6.6 kB)
+Requirement already satisfied: certifi in /usr/local/lib/python3.12/dist-packages (from httpx==0.24.1->-r /dev/stdin (line 30)) (2025.10.5)
+Collecting httpcore<0.18.0,>=0.15.0 (from httpx==0.24.1->-r /dev/stdin (line 30))
+  Downloading httpcore-0.17.3-py3-none-any.whl.metadata (18 kB)
+Requirement already satisfied: idna in /usr/local/lib/python3.12/dist-packages (from httpx==0.24.1->-r /dev/stdin (line 30)) (3.10)
+Requirement already satisfied: sniffio in /usr/local/lib/python3.12/dist-packages (from httpx==0.24.1->-r /dev/stdin (line 30)) (1.3.1)
+Collecting psutil (from deepspeed==0.13.1->-r /dev/stdin (line 7))
+  Downloading psutil-5.9.8-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (21 kB)
+Collecting annotated-types>=0.6.0 (from pydantic>=2.0->-r /dev/stdin (line 26))
+  Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.46.5 (from pydantic>=2.0->-r /dev/stdin (line 26))
+  Downloading pydantic_core-2.46.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+Collecting typing-inspection>=0.4.2 (from pydantic>=2.0->-r /dev/stdin (line 26))
+  Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+Requirement already satisfied: charset_normalizer<4,>=2 in /usr/local/lib/python3.12/dist-packages (from requests->-r /dev/stdin (line 31)) (3.4.3)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.12/dist-packages (from requests->-r /dev/stdin (line 31)) (2.5.0)
+Requirement already satisfied: jsonschema>=3.0 in /usr/local/lib/python3.12/dist-packages (from altair<6.0,>=4.2.0->gradio==3.50.0->-r /dev/stdin (line 28)) (4.25.1)
+Collecting narwhals>=1.14.2 (from altair<6.0,>=4.2.0->gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading narwhals-2.26.0-py3-none-any.whl.metadata (15 kB)
+Collecting h11<0.15,>=0.13 (from httpcore<0.18.0,>=0.15.0->httpx==0.24.1->-r /dev/stdin (line 30))
+  Downloading h11-0.14.0-py3-none-any.whl.metadata (8.2 kB)
+Requirement already satisfied: anyio<5.0,>=3.0 in /usr/local/lib/python3.12/dist-packages (from httpcore<0.18.0,>=0.15.0->httpx==0.24.1->-r /dev/stdin (line 30)) (4.11.0)
+Collecting contourpy>=1.0.1 (from matplotlib~=3.0->gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading contourpy-1.4.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+Collecting cycler>=0.10 (from matplotlib~=3.0->gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+Collecting fonttools>=4.28.2 (from matplotlib~=3.0->gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading fonttools-4.65.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (125 kB)
+Collecting kiwisolver>=1.3.1 (from matplotlib~=3.0->gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading kiwisolver-1.5.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (5.2 kB)
+Requirement already satisfied: pyparsing>=3 in /usr/lib/python3/dist-packages (from matplotlib~=3.0->gradio==3.50.0->-r /dev/stdin (line 28)) (3.1.1)
+Requirement already satisfied: python-dateutil>=2.7 in /usr/local/lib/python3.12/dist-packages (from matplotlib~=3.0->gradio==3.50.0->-r /dev/stdin (line 28)) (2.9.0.post0)
+Collecting pytz>=2020.1 (from pandas<3.0,>=1.0->gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading pytz-2026.3.post1-py2.py3-none-any.whl.metadata (22 kB)
+Collecting tzdata>=2022.7 (from pandas<3.0,>=1.0->gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading tzdata-2026.3-py2.py3-none-any.whl.metadata (1.4 kB)
+Requirement already satisfied: pygments>=2.7.3 in /usr/local/lib/python3.12/dist-packages (from markdown2[all]->-r /dev/stdin (line 27)) (2.19.2)
+Collecting wavedrom (from markdown2[all]->-r /dev/stdin (line 27))
+  Downloading wavedrom-2.0.3.post3.tar.gz (137 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting latex2mathml (from markdown2[all]->-r /dev/stdin (line 27))
+  Downloading latex2mathml-3.81.1-py3-none-any.whl.metadata (15 kB)
+Collecting httpx2<3,>=2.7.0 (from openai->-r /dev/stdin (line 32))
+  Downloading httpx2-2.12.0-py3-none-any.whl.metadata (9.5 kB)
+Collecting jiter<1,>=0.16.0 (from openai->-r /dev/stdin (line 32))
+  Downloading jiter-0.16.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.2 kB)
+Collecting httpcore2==2.12.0 (from httpx2<3,>=2.7.0->openai->-r /dev/stdin (line 32))
+  Downloading httpcore2-2.12.0-py3-none-any.whl.metadata (25 kB)
+Collecting idna (from httpx==0.24.1->-r /dev/stdin (line 30))
+  Downloading idna-3.19-py3-none-any.whl.metadata (9.2 kB)
+Collecting truststore>=0.10 (from httpx2<3,>=2.7.0->openai->-r /dev/stdin (line 32))
+  Downloading truststore-0.10.4-py3-none-any.whl.metadata (4.4 kB)
+INFO: pip is looking at multiple versions of httpcore2 to determine which version is compatible with other requirements. This could take a while.
+Collecting httpx2<3,>=2.7.0 (from openai->-r /dev/stdin (line 32))
+  Downloading httpx2-2.11.0-py3-none-any.whl.metadata (10 kB)
+Collecting httpcore2==2.11.0 (from httpx2<3,>=2.7.0->openai->-r /dev/stdin (line 32))
+  Downloading httpcore2-2.11.0-py3-none-any.whl.metadata (25 kB)
+Collecting httpx2<3,>=2.7.0 (from openai->-r /dev/stdin (line 32))
+  Downloading httpx2-2.10.0-py3-none-any.whl.metadata (10 kB)
+Collecting httpcore2==2.10.0 (from httpx2<3,>=2.7.0->openai->-r /dev/stdin (line 32))
+  Downloading httpcore2-2.10.0-py3-none-any.whl.metadata (25 kB)
+Collecting httpx2<3,>=2.7.0 (from openai->-r /dev/stdin (line 32))
+  Downloading httpx2-2.9.1-py3-none-any.whl.metadata (8.2 kB)
+Collecting httpcore2==2.9.1 (from httpx2<3,>=2.7.0->openai->-r /dev/stdin (line 32))
+  Downloading httpcore2-2.9.1-py3-none-any.whl.metadata (24 kB)
+Collecting httpx2<3,>=2.7.0 (from openai->-r /dev/stdin (line 32))
+  Downloading httpx2-2.9.0-py3-none-any.whl.metadata (8.2 kB)
+Collecting httpcore2==2.9.0 (from httpx2<3,>=2.7.0->openai->-r /dev/stdin (line 32))
+  Downloading httpcore2-2.9.0-py3-none-any.whl.metadata (24 kB)
+Collecting httpx2<3,>=2.7.0 (from openai->-r /dev/stdin (line 32))
+  Downloading httpx2-2.8.0-py3-none-any.whl.metadata (8.4 kB)
+Collecting httpcore2==2.8.0 (from httpx2<3,>=2.7.0->openai->-r /dev/stdin (line 32))
+  Downloading httpcore2-2.8.0-py3-none-any.whl.metadata (24 kB)
+Collecting httpx2<3,>=2.7.0 (from openai->-r /dev/stdin (line 32))
+  Downloading httpx2-2.7.0-py3-none-any.whl.metadata (8.4 kB)
+Collecting httpcore2==2.7.0 (from httpx2<3,>=2.7.0->openai->-r /dev/stdin (line 32))
+  Downloading httpcore2-2.7.0-py3-none-any.whl.metadata (24 kB)
+Collecting httpcore<0.18.0,>=0.15.0 (from httpx==0.24.1->-r /dev/stdin (line 30))
+  Downloading httpcore-0.17.2-py3-none-any.whl.metadata (17 kB)
+INFO: pip is still looking at multiple versions of httpcore2 to determine which version is compatible with other requirements. This could take a while.
+INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+  Downloading httpcore-0.17.1-py3-none-any.whl.metadata (17 kB)
+  Downloading httpcore-0.17.0-py3-none-any.whl.metadata (17 kB)
+  Downloading httpcore-0.16.3-py3-none-any.whl.metadata (16 kB)
+  Downloading httpcore-0.16.2-py3-none-any.whl.metadata (16 kB)
+  Downloading httpcore-0.16.1-py3-none-any.whl.metadata (16 kB)
+  Downloading httpcore-0.16.0-py3-none-any.whl.metadata (16 kB)
+  Downloading httpcore-0.15.0-py3-none-any.whl.metadata (15 kB)
+Collecting h11<0.13,>=0.11 (from httpcore<0.18.0,>=0.15.0->httpx==0.24.1->-r /dev/stdin (line 30))
+  Downloading h11-0.12.0-py3-none-any.whl.metadata (8.1 kB)
+Collecting anyio==3.* (from httpcore<0.18.0,>=0.15.0->httpx==0.24.1->-r /dev/stdin (line 30))
+  Downloading anyio-3.7.1-py3-none-any.whl.metadata (4.7 kB)
+INFO: pip is looking at multiple versions of openai to determine which version is compatible with other requirements. This could take a while.
+Collecting openai (from -r /dev/stdin (line 32))
+  Downloading openai-3.12.0-py3-none-any.whl.metadata (41 kB)
+  Downloading openai-3.11.0-py3-none-any.whl.metadata (41 kB)
+  Downloading openai-3.10.0-py3-none-any.whl.metadata (41 kB)
+  Downloading openai-3.9.0-py3-none-any.whl.metadata (41 kB)
+  Downloading openai-3.8.0-py3-none-any.whl.metadata (41 kB)
+  Downloading openai-3.7.0-py3-none-any.whl.metadata (41 kB)
+  Downloading openai-3.6.0-py3-none-any.whl.metadata (41 kB)
+INFO: pip is still looking at multiple versions of openai to determine which version is compatible with other requirements. This could take a while.
+  Downloading openai-3.5.0-py3-none-any.whl.metadata (41 kB)
+  Downloading openai-3.4.0-py3-none-any.whl.metadata (41 kB)
+  Downloading openai-3.3.1-py3-none-any.whl.metadata (41 kB)
+  Downloading openai-3.3.0-py3-none-any.whl.metadata (41 kB)
+  Downloading openai-3.2.0-py3-none-any.whl.metadata (41 kB)
+INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+  Downloading openai-3.1.0-py3-none-any.whl.metadata (39 kB)
+  Downloading openai-3.0.0-py3-none-any.whl.metadata (39 kB)
+  Downloading openai-2.54.0-py3-none-any.whl.metadata (40 kB)
+Requirement already satisfied: distro<2,>=1.7.0 in /usr/lib/python3/dist-packages (from openai->-r /dev/stdin (line 32)) (1.9.0)
+Collecting click>=7.0 (from uvicorn->-r /dev/stdin (line 33))
+  Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting starlette>=0.46.0 (from fastapi->-r /dev/stdin (line 34))
+  Downloading starlette-1.6.0-py3-none-any.whl.metadata (6.4 kB)
+Collecting annotated-doc>=0.0.2 (from fastapi->-r /dev/stdin (line 34))
+  Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+Collecting absl-py>=0.4 (from tensorboard->-r /dev/stdin (line 35))
+  Downloading absl_py-2.5.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting grpcio<2.0,>=1.74.0 (from tensorboard->-r /dev/stdin (line 35))
+  Downloading grpcio-1.83.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (3.7 kB)
+Collecting markdown>=2.6.8 (from tensorboard->-r /dev/stdin (line 35))
+  Downloading markdown-3.10.3-py3-none-any.whl.metadata (5.1 kB)
+Collecting protobuf<8.0.0,>=6.31.1 (from tensorboard->-r /dev/stdin (line 35))
+  Downloading protobuf-7.36.1-cp310-abi3-manylinux2014_x86_64.whl.metadata (595 bytes)
+Collecting tensorboard-data-server<0.8.0,>=0.7.0 (from tensorboard->-r /dev/stdin (line 35))
+  Downloading tensorboard_data_server-0.7.2-py3-none-manylinux_2_31_x86_64.whl.metadata (1.1 kB)
+Collecting werkzeug>=1.0.1 (from tensorboard->-r /dev/stdin (line 35))
+  Downloading werkzeug-3.1.8-py3-none-any.whl.metadata (4.0 kB)
+Collecting opentelemetry-api>=1.43.0 (from wandb->-r /dev/stdin (line 36))
+  Downloading opentelemetry_api-1.44.0-py3-none-any.whl.metadata (1.4 kB)
+Collecting opentelemetry-exporter-otlp-proto-http>=1.43.0 (from wandb->-r /dev/stdin (line 36))
+  Downloading opentelemetry_exporter_otlp_proto_http-1.44.0-py3-none-any.whl.metadata (2.4 kB)
+Collecting opentelemetry-sdk>=1.43.0 (from wandb->-r /dev/stdin (line 36))
+  Downloading opentelemetry_sdk-1.44.0-py3-none-any.whl.metadata (1.6 kB)
+Requirement already satisfied: platformdirs in /usr/local/lib/python3.12/dist-packages (from wandb->-r /dev/stdin (line 36)) (4.5.0)
+Collecting xxhash>=3.0.0 (from wandb->-r /dev/stdin (line 36))
+  Downloading xxhash-4.0.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (17 kB)
+INFO: pip is looking at multiple versions of contourpy to determine which version is compatible with other requirements. This could take a while.
+Collecting contourpy>=1.0.1 (from matplotlib~=3.0->gradio==3.50.0->-r /dev/stdin (line 28))
+  Downloading contourpy-1.3.3-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (5.5 kB)
+Collecting cloudpickle>=3.0 (from joblib>=1.1.1->scikit-learn==1.2.2->-r /dev/stdin (line 19))
+  Downloading cloudpickle-3.1.2-py3-none-any.whl.metadata (7.1 kB)
+Requirement already satisfied: attrs>=22.2.0 in /usr/local/lib/python3.12/dist-packages (from jsonschema>=3.0->altair<6.0,>=4.2.0->gradio==3.50.0->-r /dev/stdin (line 28)) (25.4.0)
+Requirement already satisfied: jsonschema-specifications>=2023.03.6 in /usr/local/lib/python3.12/dist-packages (from jsonschema>=3.0->altair<6.0,>=4.2.0->gradio==3.50.0->-r /dev/stdin (line 28)) (2025.9.1)
+Requirement already satisfied: referencing>=0.28.4 in /usr/local/lib/python3.12/dist-packages (from jsonschema>=3.0->altair<6.0,>=4.2.0->gradio==3.50.0->-r /dev/stdin (line 28)) (0.36.2)
+Requirement already satisfied: rpds-py>=0.7.1 in /usr/local/lib/python3.12/dist-packages (from jsonschema>=3.0->altair<6.0,>=4.2.0->gradio==3.50.0->-r /dev/stdin (line 28)) (0.27.1)
+Collecting googleapis-common-protos~=1.52 (from opentelemetry-exporter-otlp-proto-http>=1.43.0->wandb->-r /dev/stdin (line 36))
+  Downloading googleapis_common_protos-1.75.3-py3-none-any.whl.metadata (8.5 kB)
+Collecting opentelemetry-exporter-otlp-proto-common==1.44.0 (from opentelemetry-exporter-otlp-proto-http>=1.43.0->wandb->-r /dev/stdin (line 36))
+  Downloading opentelemetry_exporter_otlp_proto_common-1.44.0-py3-none-any.whl.metadata (1.8 kB)
+Collecting opentelemetry-proto==1.44.0 (from opentelemetry-exporter-otlp-proto-http>=1.43.0->wandb->-r /dev/stdin (line 36))
+  Downloading opentelemetry_proto-1.44.0-py3-none-any.whl.metadata (2.3 kB)
+Collecting opentelemetry-semantic-conventions==0.65b0 (from opentelemetry-sdk>=1.43.0->wandb->-r /dev/stdin (line 36))
+  Downloading opentelemetry_semantic_conventions-0.65b0-py3-none-any.whl.metadata (2.4 kB)
+Requirement already satisfied: six>=1.5 in /usr/lib/python3/dist-packages (from python-dateutil>=2.7->matplotlib~=3.0->gradio==3.50.0->-r /dev/stdin (line 28)) (1.16.0)
+INFO: pip is looking at multiple versions of scipy to determine which version is compatible with other requirements. This could take a while.
+Collecting scipy>=1.3.2 (from scikit-learn==1.2.2->-r /dev/stdin (line 19))
+  Using cached scipy-1.18.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+  Using cached scipy-1.17.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+Collecting nvidia-ml-py>=12.0.0 (from pynvml->deepspeed==0.13.1->-r /dev/stdin (line 7))
+  Downloading nvidia_ml_py-13.610.43-py3-none-any.whl.metadata (9.7 kB)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /usr/local/lib/python3.12/dist-packages (from sympy->torch==2.2.0->-r /dev/stdin (line 3)) (1.3.0)
+Collecting svgwrite (from wavedrom->markdown2[all]->-r /dev/stdin (line 27))
+  Downloading svgwrite-1.4.3-py3-none-any.whl.metadata (8.8 kB)
+Using cached transformers-4.40.0-py3-none-any.whl (9.0 MB)
+Using cached tokenizers-0.19.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.6 MB)
+Using cached huggingface_hub-0.23.4-py3-none-any.whl (402 kB)
+Using cached accelerate-0.26.1-py3-none-any.whl (270 kB)
+Using cached peft-0.4.0-py3-none-any.whl (72 kB)
+Using cached timm-1.0.3-py3-none-any.whl (2.3 MB)
+Using cached decord-0.6.0-py3-none-manylinux2010_x86_64.whl (13.6 MB)
+Using cached imageio-2.34.0-py3-none-any.whl (313 kB)
+Using cached imageio_ffmpeg-0.4.9-py3-none-manylinux2010_x86_64.whl (26.9 MB)
+Using cached opencv_python-4.6.0.66-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (60.9 MB)
+Using cached einops-0.6.1-py3-none-any.whl (42 kB)
+Downloading einops_exts-0.0.4-py3-none-any.whl (3.9 kB)
+Using cached bitsandbytes-0.43.0-py3-none-manylinux_2_24_x86_64.whl (102.2 MB)
+Downloading gradio-3.50.0-py3-none-any.whl (20.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 20.3/20.3 MB 20.1 MB/s  0:00:00
+Downloading gradio_client-0.6.1-py3-none-any.whl (299 kB)
+Downloading httpx-0.24.1-py3-none-any.whl (75 kB)
+Downloading spaces-0.29.2-py3-none-any.whl (26 kB)
+Downloading nvidia_cublas_cu11-11.11.3.6-py3-none-manylinux2014_x86_64.whl (417.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 417.9/417.9 MB 30.7 MB/s  0:00:13
+Downloading nvidia_cuda_cupti_cu11-11.8.87-py3-none-manylinux2014_x86_64.whl (13.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.1/13.1 MB 23.1 MB/s  0:00:00
+Downloading nvidia_cuda_nvrtc_cu11-11.8.89-py3-none-manylinux2014_x86_64.whl (23.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 23.2/23.2 MB 28.2 MB/s  0:00:00
+Downloading nvidia_cuda_runtime_cu11-11.8.89-py3-none-manylinux2014_x86_64.whl (875 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 875.6/875.6 kB 6.9 MB/s  0:00:00
+Downloading nvidia_cufft_cu11-10.9.0.58-py3-none-manylinux2014_x86_64.whl (168.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 168.4/168.4 MB 55.7 MB/s  0:00:03
+Downloading nvidia_curand_cu11-10.3.0.86-py3-none-manylinux2014_x86_64.whl (58.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58.1/58.1 MB 24.1 MB/s  0:00:02
+Downloading nvidia_cusolver_cu11-11.4.1.48-py3-none-manylinux2014_x86_64.whl (128.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 128.2/128.2 MB 30.1 MB/s  0:00:04
+Downloading nvidia_cusparse_cu11-11.7.5.86-py3-none-manylinux2014_x86_64.whl (204.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 204.1/204.1 MB 29.9 MB/s  0:00:06
+Downloading nvidia_nvtx_cu11-11.8.86-py3-none-manylinux2014_x86_64.whl (99 kB)
+Downloading pydantic-2.13.5-py3-none-any.whl (472 kB)
+Downloading pydantic_core-2.46.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 20.0 MB/s  0:00:00
+Downloading aiofiles-23.2.1-py3-none-any.whl (15 kB)
+Downloading altair-5.5.0-py3-none-any.whl (731 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 731.2/731.2 kB 4.6 MB/s  0:00:00
+Downloading decorator-4.4.2-py2.py3-none-any.whl (9.2 kB)
+Downloading httpcore-0.15.0-py3-none-any.whl (68 kB)
+Downloading h11-0.12.0-py3-none-any.whl (54 kB)
+Downloading anyio-3.7.1-py3-none-any.whl (80 kB)
+Downloading importlib_resources-6.5.2-py3-none-any.whl (37 kB)
+Downloading matplotlib-3.11.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (9.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 9.9/9.9 MB 54.1 MB/s  0:00:00
+Downloading orjson-3.12.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (131 kB)
+Downloading pandas-2.3.3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.4/12.4 MB 74.3 MB/s  0:00:00
+Downloading pillow-10.4.0-cp312-cp312-manylinux_2_28_x86_64.whl (4.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.5/4.5 MB 39.7 MB/s  0:00:00
+Downloading proglog-0.1.12-py3-none-any.whl (6.3 kB)
+Downloading psutil-5.9.8-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (288 kB)
+Downloading semantic_version-2.10.0-py2.py3-none-any.whl (15 kB)
+Using cached tqdm-4.70.1-py3-none-any.whl (80 kB)
+Downloading websockets-11.0.3-py3-none-any.whl (118 kB)
+Downloading pysubs2-1.9.0-py3-none-any.whl (48 kB)
+Downloading shortuuid-1.0.13-py3-none-any.whl (10 kB)
+Downloading markdown2-2.5.5-py3-none-any.whl (56 kB)
+Downloading openai-2.54.0-py3-none-any.whl (1.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 14.3 MB/s  0:00:00
+Downloading jiter-0.16.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (343 kB)
+Downloading uvicorn-0.52.4-py3-none-any.whl (79 kB)
+Downloading fastapi-0.141.1-py3-none-any.whl (131 kB)
+Downloading tensorboard-2.21.0-py3-none-any.whl (5.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.5/5.5 MB 41.9 MB/s  0:00:00
+Downloading grpcio-1.83.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (7.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.0/7.0 MB 55.0 MB/s  0:00:00
+Downloading protobuf-7.36.1-cp310-abi3-manylinux2014_x86_64.whl (343 kB)
+Downloading tensorboard_data_server-0.7.2-py3-none-manylinux_2_31_x86_64.whl (6.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.6/6.6 MB 50.4 MB/s  0:00:00
+Downloading wandb-0.30.0-py3-none-manylinux_2_28_x86_64.whl (26.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 26.1/26.1 MB 60.8 MB/s  0:00:00
+Downloading tabulate-0.10.0-py3-none-any.whl (39 kB)
+Downloading absl_py-2.5.0-py3-none-any.whl (137 kB)
+Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Downloading click-8.5.0-py3-none-any.whl (125 kB)
+Downloading contourpy-1.3.3-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (362 kB)
+Downloading cycler-0.12.1-py3-none-any.whl (8.3 kB)
+Downloading fonttools-4.65.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.4/5.4 MB 57.0 MB/s  0:00:00
+Downloading joblib-1.6.0-py3-none-any.whl (306 kB)
+Downloading cloudpickle-3.1.2-py3-none-any.whl (22 kB)
+Downloading kiwisolver-1.5.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.5/1.5 MB 19.3 MB/s  0:00:00
+Downloading markdown-3.10.3-py3-none-any.whl (110 kB)
+Downloading narwhals-2.26.0-py3-none-any.whl (474 kB)
+Downloading opentelemetry_api-1.44.0-py3-none-any.whl (60 kB)
+Downloading opentelemetry_exporter_otlp_proto_http-1.44.0-py3-none-any.whl (21 kB)
+Downloading opentelemetry_exporter_otlp_proto_common-1.44.0-py3-none-any.whl (17 kB)
+Downloading opentelemetry_proto-1.44.0-py3-none-any.whl (72 kB)
+Downloading googleapis_common_protos-1.75.3-py3-none-any.whl (306 kB)
+Downloading opentelemetry_sdk-1.44.0-py3-none-any.whl (137 kB)
+Downloading opentelemetry_semantic_conventions-0.65b0-py3-none-any.whl (204 kB)
+Downloading pytz-2026.3.post1-py2.py3-none-any.whl (508 kB)
+Using cached regex-2026.9.10-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (804 kB)
+Using cached safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (516 kB)
+Downloading scipy-1.17.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.2/35.2 MB 92.5 MB/s  0:00:00
+Downloading starlette-1.6.0-py3-none-any.whl (75 kB)
+Downloading threadpoolctl-3.6.0-py3-none-any.whl (18 kB)
+Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Downloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)
+Downloading werkzeug-3.1.8-py3-none-any.whl (226 kB)
+Downloading xxhash-4.0.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (261 kB)
+Downloading ffmpy-1.0.0-py3-none-any.whl (5.6 kB)
+Downloading hjson-3.1.0-py3-none-any.whl (54 kB)
+Downloading latex2mathml-3.81.1-py3-none-any.whl (79 kB)
+Using cached ninja-1.13.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (183 kB)
+Downloading py_cpuinfo-9.0.0-py3-none-any.whl (22 kB)
+Downloading pydub-0.25.1-py2.py3-none-any.whl (32 kB)
+Downloading pynvml-13.0.1-py3-none-any.whl (28 kB)
+Downloading nvidia_ml_py-13.610.43-py3-none-any.whl (53 kB)
+Downloading python_multipart-0.0.32-py3-none-any.whl (30 kB)
+Downloading svgwrite-1.4.3-py3-none-any.whl (67 kB)
+Building wheels for collected packages: deepspeed, moviepy, scikit-learn, sentencepiece, wavedrom
+  Building wheel for deepspeed (pyproject.toml): started
+  Building wheel for deepspeed (pyproject.toml): finished with status 'done'
+  Created wheel for deepspeed: filename=deepspeed-0.13.1-py3-none-any.whl size=1350354 sha256=69041ee2b367c9e893605cc1b1a67a8cea273e2b2f5124a47c9bd40b7fefbd83
+  Stored in directory: /workspace/.cache/pip/wheels/0f/87/88/d673a032ce308feaeaccd9a9a530ba120308efdd204731eb0e
+  Building wheel for moviepy (pyproject.toml): started
+  Building wheel for moviepy (pyproject.toml): finished with status 'done'
+  Created wheel for moviepy: filename=moviepy-1.0.3-py3-none-any.whl size=110796 sha256=04b280d2acec34e16a81a4b4bb899dcfa201653d387d53b6762cfc1936ca1cb5
+  Stored in directory: /workspace/.cache/pip/wheels/df/ba/4b/0917fc0c8833c8ba7016565fc975b74c67bc8610806e930272
+  Building wheel for scikit-learn (pyproject.toml): started
+  Building wheel for scikit-learn (pyproject.toml): still running...
+  Building wheel for scikit-learn (pyproject.toml): still running...
+  Building wheel for scikit-learn (pyproject.toml): still running...
+  Building wheel for scikit-learn (pyproject.toml): still running...
+  Building wheel for scikit-learn (pyproject.toml): still running...
+  Building wheel for scikit-learn (pyproject.toml): finished with status 'done'
+  Created wheel for scikit-learn: filename=scikit_learn-1.2.2-cp312-cp312-linux_x86_64.whl size=9847803 sha256=54f81a79d7d5644a7c26a94028c8d9dcd37e1241859aceacf608181ee4f4f7c0
+  Stored in directory: /workspace/.cache/pip/wheels/24/f8/77/ae90c181b806f450a6fec8c8f794594e7c92fa79d7ca27e656
+  Building wheel for sentencepiece (pyproject.toml): started
+  Building wheel for sentencepiece (pyproject.toml): finished with status 'done'
+  Created wheel for sentencepiece: filename=sentencepiece-0.1.99-cp312-cp312-linux_x86_64.whl size=1308927 sha256=e46d7c78755a82c57f69531906478c5fde446fe05d59e26a9e682d9763c7079f
+  Stored in directory: /workspace/.cache/pip/wheels/e0/8c/e0/65e33b1f4b8462dfc537a0cac02e5c03e1207564c300e4bde5
+  Building wheel for wavedrom (pyproject.toml): started
+  Building wheel for wavedrom (pyproject.toml): finished with status 'done'
+  Created wheel for wavedrom: filename=wavedrom-2.0.3.post3-py2.py3-none-any.whl size=30147 sha256=2a78c05f98e4140ad2050e6cade41ae7c53587edb86480157e6bd10f5a91d526
+  Stored in directory: /workspace/.cache/pip/wheels/dd/97/87/67fda20d5b17da917e87e94dcdc39acd2195796f42511e42fe
+Successfully built deepspeed moviepy scikit-learn sentencepiece wavedrom
+Installing collected packages: sentencepiece, pytz, pydub, py-cpuinfo, nvidia-ml-py, hjson, xxhash, websockets, tzdata, typing-inspection, tqdm, threadpoolctl, tensorboard-data-server, tabulate, svgwrite, shortuuid, semantic-version, scipy, safetensors, regex, python-multipart, pysubs2, pynvml, pydantic-core, psutil, protobuf, pillow, orjson, opentelemetry-api, opencv-python, nvidia-nvtx-cu11, nvidia-nccl-cu11, nvidia-cusparse-cu11, nvidia-curand-cu11, nvidia-cufft-cu11, nvidia-cuda-runtime-cu11, nvidia-cuda-nvrtc-cu11, nvidia-cuda-cupti-cu11, nvidia-cublas-cu11, ninja, narwhals, markupsafe, markdown2, markdown, latex2mathml, kiwisolver, jiter, importlib-resources, imageio-ffmpeg, h11, grpcio, fonttools, ffmpy, einops, decord, decorator, cycler, contourpy, cloudpickle, click, anyio, annotated-types, annotated-doc, aiofiles, absl-py, werkzeug, wavedrom, uvicorn, starlette, pydantic, proglog, pandas, opentelemetry-semantic-conventions, opentelemetry-proto, nvidia-cusolver-cu11, nvidia-cudnn-cu11, matplotlib, joblib, imageio, huggingface_hub, httpcore, googleapis-common-protos, einops-exts, torch, tokenizers, tensorboard, scikit-learn, opentelemetry-sdk, opentelemetry-exporter-otlp-proto-common, moviepy, httpx, fastapi, transformers, torchvision, opentelemetry-exporter-otlp-proto-http, openai, gradio_client, deepspeed, bitsandbytes, altair, accelerate, wandb, timm, peft, gradio, spaces
+  Attempting uninstall: psutil
+    Found existing installation: psutil 7.1.0
+    Uninstalling psutil-7.1.0:
+      Successfully uninstalled psutil-7.1.0
+  Attempting uninstall: pillow
+    Found existing installation: pillow 11.0.0
+    Uninstalling pillow-11.0.0:
+      Successfully uninstalled pillow-11.0.0
+  Attempting uninstall: markupsafe
+    Found existing installation: MarkupSafe 3.0.3
+    Uninstalling MarkupSafe-3.0.3:
+      Successfully uninstalled MarkupSafe-3.0.3
+  Attempting uninstall: h11
+    Found existing installation: h11 0.16.0
+    Uninstalling h11-0.16.0:
+      Successfully uninstalled h11-0.16.0
+  Attempting uninstall: decorator
+    Found existing installation: decorator 5.2.1
+    Uninstalling decorator-5.2.1:
+      Successfully uninstalled decorator-5.2.1
+  Attempting uninstall: anyio
+    Found existing installation: anyio 4.11.0
+    Uninstalling anyio-4.11.0:
+      Successfully uninstalled anyio-4.11.0
+  Attempting uninstall: httpcore
+    Found existing installation: httpcore 1.0.9
+    Uninstalling httpcore-1.0.9:
+      Successfully uninstalled httpcore-1.0.9
+  Attempting uninstall: torch
+    Found existing installation: torch 2.8.0+cu128
+    Uninstalling torch-2.8.0+cu128:
+      Successfully uninstalled torch-2.8.0+cu128
+  Attempting uninstall: httpx
+    Found existing installation: httpx 0.28.1
+    Uninstalling httpx-0.28.1:
+      Successfully uninstalled httpx-0.28.1
+  Attempting uninstall: torchvision
+    Found existing installation: torchvision 0.23.0+cu128
+    Uninstalling torchvision-0.23.0+cu128:
+      Successfully uninstalled torchvision-0.23.0+cu128
+
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+torchaudio 2.8.0+cu128 requires torch==2.8.0, but you have torch 2.2.0+cu118 which is incompatible.
+jupyterlab 4.4.9 requires httpx<1,>=0.25.0, but you have httpx 0.24.1 which is incompatible.
+Successfully installed absl-py-2.5.0 accelerate-0.26.1 aiofiles-23.2.1 altair-5.5.0 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-3.7.1 bitsandbytes-0.43.0 click-8.5.0 cloudpickle-3.1.2 contourpy-1.3.3 cycler-0.12.1 decorator-4.4.2 decord-0.6.0 deepspeed-0.13.1 einops-0.6.1 einops-exts-0.0.4 fastapi-0.141.1 ffmpy-1.0.0 fonttools-4.65.0 googleapis-common-protos-1.75.3 gradio-3.50.0 gradio_client-0.6.1 grpcio-1.83.1 h11-0.12.0 hjson-3.1.0 httpcore-0.15.0 httpx-0.24.1 huggingface_hub-0.23.4 imageio-2.34.0 imageio-ffmpeg-0.4.9 importlib-resources-6.5.2 jiter-0.16.0 joblib-1.6.0 kiwisolver-1.5.1 latex2mathml-3.81.1 markdown-3.10.3 markdown2-2.5.5 markupsafe-2.1.5 matplotlib-3.11.2 moviepy-1.0.3 narwhals-2.26.0 ninja-1.13.2 nvidia-cublas-cu11-11.11.3.6 nvidia-cuda-cupti-cu11-11.8.87 nvidia-cuda-nvrtc-cu11-11.8.89 nvidia-cuda-runtime-cu11-11.8.89 nvidia-cudnn-cu11-8.7.0.84 nvidia-cufft-cu11-10.9.0.58 nvidia-curand-cu11-10.3.0.86 nvidia-cusolver-cu11-11.4.1.48 nvidia-cusparse-cu11-11.7.5.86 nvidia-ml-py-13.610.43 nvidia-nccl-cu11-2.19.3 nvidia-nvtx-cu11-11.8.86 openai-2.54.0 opencv-python-4.6.0.66 opentelemetry-api-1.44.0 opentelemetry-exporter-otlp-proto-common-1.44.0 opentelemetry-exporter-otlp-proto-http-1.44.0 opentelemetry-proto-1.44.0 opentelemetry-sdk-1.44.0 opentelemetry-semantic-conventions-0.65b0 orjson-3.12.0 pandas-2.3.3 peft-0.4.0 pillow-10.4.0 proglog-0.1.12 protobuf-7.36.1 psutil-5.9.8 py-cpuinfo-9.0.0 pydantic-2.13.5 pydantic-core-2.46.5 pydub-0.25.1 pynvml-13.0.1 pysubs2-1.9.0 python-multipart-0.0.32 pytz-2026.3.post1 regex-2026.9.10 safetensors-0.8.0 scikit-learn-1.2.2 scipy-1.17.1 semantic-version-2.10.0 sentencepiece-0.1.99 shortuuid-1.0.13 spaces-0.29.2 starlette-1.6.0 svgwrite-1.4.3 tabulate-0.10.0 tensorboard-2.21.0 tensorboard-data-server-0.7.2 threadpoolctl-3.6.0 timm-1.0.3 tokenizers-0.19.1 torch-2.2.0+cu118 torchvision-0.17.0+cu118 tqdm-4.70.1 transformers-4.40.0 typing-inspection-0.4.4 tzdata-2026.3 uvicorn-0.52.4 wandb-0.30.0 wavedrom-2.0.3.post3 websockets-11.0.3 werkzeug-3.1.8 xxhash-4.0.1
+[?2004h]0;root@e558df44a973: /workspace/VideoLLaMA2root@e558df44a973:/workspace/VideoLLaMA2# [7mpython inference_test.py[27m
+[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpython inference_test.py
+[A
+[?2004l/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:54: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/usr/local/lib/python3.12/dist-packages/huggingface_hub/file_download.py:1132: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Loading checkpoint shards:   0%|                                                                                                                  | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██████████████████████████▌                                                                               | 1/4 [00:20<01:01, 20.42s/it]Loading checkpoint shards:  50%|█████████████████████████████████████████████████████                                                     | 2/4 [00:42<00:43, 21.56s/it]Loading checkpoint shards:  75%|███████████████████████████████████████████████████████████████████████████████▌                          | 3/4 [01:13<00:25, 25.61s/it]Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [01:25<00:00, 20.18s/it]Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [01:25<00:00, 21.27s/it]
+Some weights of the model checkpoint at DAMO-NLP-SG/VideoLLaMA2.1-7B-AV were not used when initializing Videollama2Qwen2ForCausalLM: ['model.audio_tower.encoder.layer_norm.bias', 'model.audio_tower.encoder.layer_norm.weight', 'model.audio_tower.encoder.layers.0.fc1.bias', 'model.audio_tower.encoder.layers.0.fc1.weight', 'model.audio_tower.encoder.layers.0.fc2.bias', 'model.audio_tower.encoder.layers.0.fc2.weight', 'model.audio_tower.encoder.layers.0.final_layer_norm.bias', 'model.audio_tower.encoder.layers.0.final_layer_norm.weight', 'model.audio_tower.encoder.layers.0.self_attn.grep_a', 'model.audio_tower.encoder.layers.0.self_attn.grep_linear.bias', 'model.audio_tower.encoder.layers.0.self_attn.grep_linear.weight', 'model.audio_tower.encoder.layers.0.self_attn.k_proj.bias', 'model.audio_tower.encoder.layers.0.self_attn.k_proj.weight', 'model.audio_tower.encoder.layers.0.self_attn.out_proj.bias', 'model.audio_tower.encoder.layers.0.self_attn.out_proj.weight', 'model.audio_tower.encoder.layers.0.self_attn.q_proj.bias', 'model.audio_tower.encoder.layers.0.self_attn.q_proj.weight', 'model.audio_tower.encoder.layers.0.self_attn.relative_attention_bias.weight', 'model.audio_tower.encoder.layers.0.self_attn.v_proj.bias', 'model.audio_tower.encoder.layers.0.self_attn.v_proj.weight', 'model.audio_tower.encoder.layers.0.self_attn_layer_norm.bias', 'model.audio_tower.encoder.layers.0.self_attn_layer_norm.weight', 'model.audio_tower.encoder.layers.1.fc1.bias', 'model.audio_tower.encoder.layers.1.fc1.weight', 'model.audio_tower.encoder.layers.1.fc2.bias', 'model.audio_tower.encoder.layers.1.fc2.weight', 'model.audio_tower.encoder.layers.1.final_layer_norm.bias', 'model.audio_tower.encoder.layers.1.final_layer_norm.weight', 'model.audio_tower.encoder.layers.1.self_attn.grep_a', 'model.audio_tower.encoder.layers.1.self_attn.grep_linear.bias', 'model.audio_tower.encoder.layers.1.self_attn.grep_linear.weight', 'model.audio_tower.encoder.layers.1.self_attn.k_proj.bias', 'model.audio_tower.encoder.layers.1.self_attn.k_proj.weight', 'model.audio_tower.encoder.layers.1.self_attn.out_proj.bias', 'model.audio_tower.encoder.layers.1.self_attn.out_proj.weight', 'model.audio_tower.encoder.layers.1.self_attn.q_proj.bias', 'model.audio_tower.encoder.layers.1.self_attn.q_proj.weight', 'model.audio_tower.encoder.layers.1.self_attn.relative_attention_bias.weight', 'model.audio_tower.encoder.layers.1.self_attn.v_proj.bias', 'model.audio_tower.encoder.layers.1.self_attn.v_proj.weight', 'model.audio_tower.encoder.layers.1.self_attn_layer_norm.bias', 'model.audio_tower.encoder.layers.1.self_attn_layer_norm.weight', 'model.audio_tower.encoder.layers.10.fc1.bias', 'model.audio_tower.encoder.layers.10.fc1.weight', 'model.audio_tower.encoder.layers.10.fc2.bias', 'model.audio_tower.encoder.layers.10.fc2.weight', 'model.audio_tower.encoder.layers.10.final_layer_norm.bias', 'model.audio_tower.encoder.layers.10.final_layer_norm.weight', 'model.audio_tower.encoder.layers.10.self_attn.grep_a', 'model.audio_tower.encoder.layers.10.self_attn.grep_linear.bias', 'model.audio_tower.encoder.layers.10.self_attn.grep_linear.weight', 'model.audio_tower.encoder.layers.10.self_attn.k_proj.bias', 'model.audio_tower.encoder.layers.10.self_attn.k_proj.weight', 'model.audio_tower.encoder.layers.10.self_attn.out_proj.bias', 'model.audio_tower.encoder.layers.10.self_attn.out_proj.weight', 'model.audio_tower.encoder.layers.10.self_attn.q_proj.bias', 'model.audio_tower.encoder.layers.10.self_attn.q_proj.weight', 'model.audio_tower.encoder.layers.10.self_attn.relative_attention_bias.weight', 'model.audio_tower.encoder.layers.10.self_attn.v_proj.bias', 'model.audio_tower.encoder.layers.10.self_attn.v_proj.weight', 'model.audio_tower.encoder.layers.10.self_attn_layer_norm.bias', 'model.audio_tower.encoder.layers.10.self_attn_layer_norm.weight', 'model.audio_tower.encoder.layers.11.fc1.bias', 'model.audio_tower.encoder.layers.11.fc1.weight', 'model.audio_tower.encoder.layers.11.fc2.bias', 'model.audio_tower.encoder.layers.11.fc2.weight', 'model.audio_tower.encoder.layers.11.final_layer_norm.bias', 'model.audio_tower.encoder.layers.11.final_layer_norm.weight', 'model.audio_tower.encoder.layers.11.self_attn.grep_a', 'model.audio_tower.encoder.layers.11.self_attn.grep_linear.bias', 'model.audio_tower.encoder.layers.11.self_attn.grep_linear.weight', 'model.audio_tower.encoder.layers.11.self_attn.k_proj.bias', 'model.audio_tower.encoder.layers.11.self_attn.k_proj.weight', 'model.audio_tower.encoder.layers.11.self_attn.out_proj.bias', 'model.audio_tower.encoder.layers.11.self_attn.out_proj.weight', 'model.audio_tower.encoder.layers.11.self_attn.q_proj.bias', 'model.audio_tower.encoder.layers.11.self_attn.q_proj.weight', 'model.audio_tower.encoder.layers.11.self_attn.relative_attention_bias.weight', 'model.audio_tower.encoder.layers.11.self_attn.v_proj.bias', 'model.audio_tower.encoder.layers.11.self_attn.v_proj.weight', 'model.audio_tower.encoder.layers.11.self_attn_layer_norm.bias', 'model.audio_tower.encoder.layers.11.self_attn_layer_norm.weight', 'model.audio_tower.encoder.layers.2.fc1.bias', 'model.audio_tower.encoder.layers.2.fc1.weight', 'model.audio_tower.encoder.layers.2.fc2.bias', 'model.audio_tower.encoder.layers.2.fc2.weight', 'model.audio_tower.encoder.layers.2.final_layer_norm.bias', 'model.audio_tower.encoder.layers.2.final_layer_norm.weight', 'model.audio_tower.encoder.layers.2.self_attn.grep_a', 'model.audio_tower.encoder.layers.2.self_attn.grep_linear.bias', 'model.audio_tower.encoder.layers.2.self_attn.grep_linear.weight', 'model.audio_tower.encoder.layers.2.self_attn.k_proj.bias', 'model.audio_tower.encoder.layers.2.self_attn.k_proj.weight', 'model.audio_tower.encoder.layers.2.self_attn.out_proj.bias', 'model.audio_tower.encoder.layers.2.self_attn.out_proj.weight', 'model.audio_tower.encoder.layers.2.self_attn.q_proj.bias', 'model.audio_tower.encoder.layers.2.self_attn.q_proj.weight', 'model.audio_tower.encoder.layers.2.self_attn.relative_attention_bias.weight', 'model.audio_tower.encoder.layers.2.self_attn.v_proj.bias', 'model.audio_tower.encoder.layers.2.self_attn.v_proj.weight', 'model.audio_tower.encoder.layers.2.self_attn_layer_norm.bias', 'model.audio_tower.encoder.layers.2.self_attn_layer_norm.weight', 'model.audio_tower.encoder.layers.3.fc1.bias', 'model.audio_tower.encoder.layers.3.fc1.weight', 'model.audio_tower.encoder.layers.3.fc2.bias', 'model.audio_tower.encoder.layers.3.fc2.weight', 'model.audio_tower.encoder.layers.3.final_layer_norm.bias', 'model.audio_tower.encoder.layers.3.final_layer_norm.weight', 'model.audio_tower.encoder.layers.3.self_attn.grep_a', 'model.audio_tower.encoder.layers.3.self_attn.grep_linear.bias', 'model.audio_tower.encoder.layers.3.self_attn.grep_linear.weight', 'model.audio_tower.encoder.layers.3.self_attn.k_proj.bias', 'model.audio_tower.encoder.layers.3.self_attn.k_proj.weight', 'model.audio_tower.encoder.layers.3.self_attn.out_proj.bias', 'model.audio_tower.encoder.layers.3.self_attn.out_proj.weight', 'model.audio_tower.encoder.layers.3.self_attn.q_proj.bias', 'model.audio_tower.encoder.layers.3.self_attn.q_proj.weight', 'model.audio_tower.encoder.layers.3.self_attn.relative_attention_bias.weight', 'model.audio_tower.encoder.layers.3.self_attn.v_proj.bias', 'model.audio_tower.encoder.layers.3.self_attn.v_proj.weight', 'model.audio_tower.encoder.layers.3.self_attn_layer_norm.bias', 'model.audio_tower.encoder.layers.3.self_attn_layer_norm.weight', 'model.audio_tower.encoder.layers.4.fc1.bias', 'model.audio_tower.encoder.layers.4.fc1.weight', 'model.audio_tower.encoder.layers.4.fc2.bias', 'model.audio_tower.encoder.layers.4.fc2.weight', 'model.audio_tower.encoder.layers.4.final_layer_norm.bias', 'model.audio_tower.encoder.layers.4.final_layer_norm.weight', 'model.audio_tower.encoder.layers.4.self_attn.grep_a', 'model.audio_tower.encoder.layers.4.self_attn.grep_linear.bias', 'model.audio_tower.encoder.layers.4.self_attn.grep_linear.weight', 'model.audio_tower.encoder.layers.4.self_attn.k_proj.bias', 'model.audio_tower.encoder.layers.4.self_attn.k_proj.weight', 'model.audio_tower.encoder.layers.4.self_attn.out_proj.bias', 'model.audio_tower.encoder.layers.4.self_attn.out_proj.weight', 'model.audio_tower.encoder.layers.4.self_attn.q_proj.bias', 'model.audio_tower.encoder.layers.4.self_attn.q_proj.weight', 'model.audio_tower.encoder.layers.4.self_attn.relative_attention_bias.weight', 'model.audio_tower.encoder.layers.4.self_attn.v_proj.bias', 'model.audio_tower.encoder.layers.4.self_attn.v_proj.weight', 'model.audio_tower.encoder.layers.4.self_attn_layer_norm.bias', 'model.audio_tower.encoder.layers.4.self_attn_layer_norm.weight', 'model.audio_tower.encoder.layers.5.fc1.bias', 'model.audio_tower.encoder.layers.5.fc1.weight', 'model.audio_tower.encoder.layers.5.fc2.bias', 'model.audio_tower.encoder.layers.5.fc2.weight', 'model.audio_tower.encoder.layers.5.final_layer_norm.bias', 'model.audio_tower.encoder.layers.5.final_layer_norm.weight', 'model.audio_tower.encoder.layers.5.self_attn.grep_a', 'model.audio_tower.encoder.layers.5.self_attn.grep_linear.bias', 'model.audio_tower.encoder.layers.5.self_attn.grep_linear.weight', 'model.audio_tower.encoder.layers.5.self_attn.k_proj.bias', 'model.audio_tower.encoder.layers.5.self_attn.k_proj.weight', 'model.audio_tower.encoder.layers.5.self_attn.out_proj.bias', 'model.audio_tower.encoder.layers.5.self_attn.out_proj.weight', 'model.audio_tower.encoder.layers.5.self_attn.q_proj.bias', 'model.audio_tower.encoder.layers.5.self_attn.q_proj.weight', 'model.audio_tower.encoder.layers.5.self_attn.relative_attention_bias.weight', 'model.audio_tower.encoder.layers.5.self_attn.v_proj.bias', 'model.audio_tower.encoder.layers.5.self_attn.v_proj.weight', 'model.audio_tower.encoder.layers.5.self_attn_layer_norm.bias', 'model.audio_tower.encoder.layers.5.self_attn_layer_norm.weight', 'model.audio_tower.encoder.layers.6.fc1.bias', 'model.audio_tower.encoder.layers.6.fc1.weight', 'model.audio_tower.encoder.layers.6.fc2.bias', 'model.audio_tower.encoder.layers.6.fc2.weight', 'model.audio_tower.encoder.layers.6.final_layer_norm.bias', 'model.audio_tower.encoder.layers.6.final_layer_norm.weight', 'model.audio_tower.encoder.layers.6.self_attn.grep_a', 'model.audio_tower.encoder.layers.6.self_attn.grep_linear.bias', 'model.audio_tower.encoder.layers.6.self_attn.grep_linear.weight', 'model.audio_tower.encoder.layers.6.self_attn.k_proj.bias', 'model.audio_tower.encoder.layers.6.self_attn.k_proj.weight', 'model.audio_tower.encoder.layers.6.self_attn.out_proj.bias', 'model.audio_tower.encoder.layers.6.self_attn.out_proj.weight', 'model.audio_tower.encoder.layers.6.self_attn.q_proj.bias', 'model.audio_tower.encoder.layers.6.self_attn.q_proj.weight', 'model.audio_tower.encoder.layers.6.self_attn.relative_attention_bias.weight', 'model.audio_tower.encoder.layers.6.self_attn.v_proj.bias', 'model.audio_tower.encoder.layers.6.self_attn.v_proj.weight', 'model.audio_tower.encoder.layers.6.self_attn_layer_norm.bias', 'model.audio_tower.encoder.layers.6.self_attn_layer_norm.weight', 'model.audio_tower.encoder.layers.7.fc1.bias', 'model.audio_tower.encoder.layers.7.fc1.weight', 'model.audio_tower.encoder.layers.7.fc2.bias', 'model.audio_tower.encoder.layers.7.fc2.weight', 'model.audio_tower.encoder.layers.7.final_layer_norm.bias', 'model.audio_tower.encoder.layers.7.final_layer_norm.weight', 'model.audio_tower.encoder.layers.7.self_attn.grep_a', 'model.audio_tower.encoder.layers.7.self_attn.grep_linear.bias', 'model.audio_tower.encoder.layers.7.self_attn.grep_linear.weight', 'model.audio_tower.encoder.layers.7.self_attn.k_proj.bias', 'model.audio_tower.encoder.layers.7.self_attn.k_proj.weight', 'model.audio_tower.encoder.layers.7.self_attn.out_proj.bias', 'model.audio_tower.encoder.layers.7.self_attn.out_proj.weight', 'model.audio_tower.encoder.layers.7.self_attn.q_proj.bias', 'model.audio_tower.encoder.layers.7.self_attn.q_proj.weight', 'model.audio_tower.encoder.layers.7.self_attn.relative_attention_bias.weight', 'model.audio_tower.encoder.layers.7.self_attn.v_proj.bias', 'model.audio_tower.encoder.layers.7.self_attn.v_proj.weight', 'model.audio_tower.encoder.layers.7.self_attn_layer_norm.bias', 'model.audio_tower.encoder.layers.7.self_attn_layer_norm.weight', 'model.audio_tower.encoder.layers.8.fc1.bias', 'model.audio_tower.encoder.layers.8.fc1.weight', 'model.audio_tower.encoder.layers.8.fc2.bias', 'model.audio_tower.encoder.layers.8.fc2.weight', 'model.audio_tower.encoder.layers.8.final_layer_norm.bias', 'model.audio_tower.encoder.layers.8.final_layer_norm.weight', 'model.audio_tower.encoder.layers.8.self_attn.grep_a', 'model.audio_tower.encoder.layers.8.self_attn.grep_linear.bias', 'model.audio_tower.encoder.layers.8.self_attn.grep_linear.weight', 'model.audio_tower.encoder.layers.8.self_attn.k_proj.bias', 'model.audio_tower.encoder.layers.8.self_attn.k_proj.weight', 'model.audio_tower.encoder.layers.8.self_attn.out_proj.bias', 'model.audio_tower.encoder.layers.8.self_attn.out_proj.weight', 'model.audio_tower.encoder.layers.8.self_attn.q_proj.bias', 'model.audio_tower.encoder.layers.8.self_attn.q_proj.weight', 'model.audio_tower.encoder.layers.8.self_attn.relative_attention_bias.weight', 'model.audio_tower.encoder.layers.8.self_attn.v_proj.bias', 'model.audio_tower.encoder.layers.8.self_attn.v_proj.weight', 'model.audio_tower.encoder.layers.8.self_attn_layer_norm.bias', 'model.audio_tower.encoder.layers.8.self_attn_layer_norm.weight', 'model.audio_tower.encoder.layers.9.fc1.bias', 'model.audio_tower.encoder.layers.9.fc1.weight', 'model.audio_tower.encoder.layers.9.fc2.bias', 'model.audio_tower.encoder.layers.9.fc2.weight', 'model.audio_tower.encoder.layers.9.final_layer_norm.bias', 'model.audio_tower.encoder.layers.9.final_layer_norm.weight', 'model.audio_tower.encoder.layers.9.self_attn.grep_a', 'model.audio_tower.encoder.layers.9.self_attn.grep_linear.bias', 'model.audio_tower.encoder.layers.9.self_attn.grep_linear.weight', 'model.audio_tower.encoder.layers.9.self_attn.k_proj.bias', 'model.audio_tower.encoder.layers.9.self_attn.k_proj.weight', 'model.audio_tower.encoder.layers.9.self_attn.out_proj.bias', 'model.audio_tower.encoder.layers.9.self_attn.out_proj.weight', 'model.audio_tower.encoder.layers.9.self_attn.q_proj.bias', 'model.audio_tower.encoder.layers.9.self_attn.q_proj.weight', 'model.audio_tower.encoder.layers.9.self_attn.relative_attention_bias.weight', 'model.audio_tower.encoder.layers.9.self_attn.v_proj.bias', 'model.audio_tower.encoder.layers.9.self_attn.v_proj.weight', 'model.audio_tower.encoder.layers.9.self_attn_layer_norm.bias', 'model.audio_tower.encoder.layers.9.self_attn_layer_norm.weight', 'model.audio_tower.encoder.pos_conv.0.bias', 'model.audio_tower.encoder.pos_conv.0.weight_g', 'model.audio_tower.encoder.pos_conv.0.weight_v', 'model.audio_tower.layer_norm.bias', 'model.audio_tower.layer_norm.weight', 'model.audio_tower.patch_embedding.weight', 'model.audio_tower.post_extract_proj.bias', 'model.audio_tower.post_extract_proj.weight', 'model.audio_tower.predictor.bias', 'model.audio_tower.predictor.weight', 'model.mm_projector_a.0.bias', 'model.mm_projector_a.0.weight', 'model.mm_projector_a.2.bias', 'model.mm_projector_a.2.weight']
+- This IS expected if you are initializing Videollama2Qwen2ForCausalLM from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing Videollama2Qwen2ForCausalLM from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:492: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:497: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:509: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
+  warnings.warn(
+This image captures a vibrant night scene on a bustling street in Japan. The street, slick with the sheen of recent rain, is bathed in the glow of numerous bright lights emanating from the surrounding buildings and signs. 
+
+In the center of the frame stands a woman, her presence accentuated by her striking red dress and contrasting black coat. She holds a black purse in her hand, adding to her stylish ensemble. Her gaze is directed towards the camera, lending an air of mystery to the scene.
+
+The background is a kaleidoscope of colors, with at least 20 different signs illuminating the night. These signs, displaying a variety of hues including red, yellow, and white, add depth and dimension to the image.
+
+The perspective of the photo is particularly intriguing - taken from a low angle looking up at the woman, it gives her an imposing presence that commands attention amidst the vibrant backdrop.
+
+This image is a beautiful blend of color, light, and shadow, capturing not just a moment in time but also the essence of urban life in Japan.
+[?2004h]0;root@e558df44a973: /workspace/VideoLLaMA2root@e558df44a973:/workspace/VideoLLaMA2# exit
+[?2004lexit
+
+Script done on 2026-09-12 06:51:27+00:00 [COMMAND_EXIT_CODE="0"]
