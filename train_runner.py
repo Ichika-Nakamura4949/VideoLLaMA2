@@ -7,6 +7,10 @@ videollama2/train.py を torchrun 経由で呼び出すラッパー。
 tune_mm_mlp_adapter / tune_mm_mlp_adapter_a フラグの使い分け:
   Phase1/Phase2（全パラメータ学習）: False（デフォルト）→ freeze ブロックをスキップ
   Step2a/Step2b（コネクタのみ再整合）: True → LLM+エンコーダを凍結しコネクタのみ学習
+
+lora_enable フラグの使い分け:
+  Phase1/Phase2（LLM を学習）: True → LoRA で LLM の trainable param を削減
+  Step2a/Step2b（コネクタのみ再整合）: False（デフォルト）→ LLM 凍結なので LoRA 不要
 """
 
 import os
@@ -33,6 +37,10 @@ def train_image(
     vision_tower: str,
     *,
     tune_mm_mlp_adapter: bool = False,
+    lora_enable: bool = False,
+    lora_r: int = 128,
+    lora_alpha: int = 256,
+    deepspeed_config: str | None = None,
     lr: float = 2e-4,
     mm_projector_lr: float = 2e-5,
     batch_size: int = 4,
@@ -50,6 +58,10 @@ def train_image(
         output_dir          : チェックポイントの出力先
         vision_tower        : ビジョンエンコーダの ID またはパス
         tune_mm_mlp_adapter : True = コネクタのみ学習（Step2a ReAlign 用）
+        lora_enable         : True = LoRA で LLM を学習（Phase1 用）
+        lora_r              : LoRA rank（論文 Appendix C.1 = 128）
+        lora_alpha          : LoRA alpha（= 2 × lora_r）
+        deepspeed_config    : DeepSpeed 設定 JSON のパス。None でオフ
         lr                  : LLM の学習率
         mm_projector_lr     : コネクタの学習率
         batch_size          : デバイスあたりのバッチサイズ
@@ -89,9 +101,20 @@ def train_image(
         "--gradient_checkpointing",       "True",
         "--dataloader_num_workers",       "4",
         "--save_strategy",                "epoch",
+        "--save_only_model",              "True",
         "--tune_mm_mlp_adapter",          str(tune_mm_mlp_adapter),
         "--report_to",                    "tensorboard",
     ]
+
+    if lora_enable:
+        cmd += [
+            "--lora_enable", "True",
+            "--lora_r",      str(lora_r),
+            "--lora_alpha",  str(lora_alpha),
+        ]
+
+    if deepspeed_config:
+        cmd += ["--deepspeed", deepspeed_config]
 
     _run(cmd)
 
@@ -104,6 +127,10 @@ def train_audio(
     *,
     tune_audio_tower: bool = True,
     tune_mm_mlp_adapter_a: bool = False,
+    lora_enable: bool = False,
+    lora_r: int = 128,
+    lora_alpha: int = 256,
+    deepspeed_config: str | None = None,
     lr: float = 2e-5,
     mm_projector_lr: float | None = None,
     batch_size: int = 4,
@@ -126,6 +153,10 @@ def train_audio(
                                 False = エンコーダ凍結（Step2b ReAlign 用）
         tune_mm_mlp_adapter_a : False = 全パラメータ学習（Phase2 用・デフォルト）
                                 True  = 音声コネクタのみ学習（Step2b ReAlign 用）
+        lora_enable           : True = LoRA で LLM を学習（Phase2 用）
+        lora_r                : LoRA rank（論文 Appendix C.1 = 128）
+        lora_alpha            : LoRA alpha（= 2 × lora_r）
+        deepspeed_config      : DeepSpeed 設定 JSON のパス。None でオフ
         lr                    : LLM・音声エンコーダの学習率
         mm_projector_lr       : 音声コネクタ（mm_projector_a）の学習率。
                                 None のとき lr と同じ値が使われる。
@@ -164,10 +195,21 @@ def train_audio(
         "--gradient_checkpointing",       "True",
         "--dataloader_num_workers",       "4",
         "--save_strategy",                "epoch",
+        "--save_only_model",              "True",
         "--report_to",                    "tensorboard",
     ]
 
     if mm_projector_lr is not None:
         cmd += ["--mm_projector_lr", str(mm_projector_lr)]
+
+    if lora_enable:
+        cmd += [
+            "--lora_enable", "True",
+            "--lora_r",      str(lora_r),
+            "--lora_alpha",  str(lora_alpha),
+        ]
+
+    if deepspeed_config:
+        cmd += ["--deepspeed", deepspeed_config]
 
     _run(cmd)
