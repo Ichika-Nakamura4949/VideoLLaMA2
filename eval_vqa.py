@@ -26,6 +26,7 @@ import json
 import os
 import re
 import sys
+import torch
 from pathlib import Path
 
 from tqdm import tqdm
@@ -118,6 +119,9 @@ def run(args) -> float:
             for r in results:
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
         print(f"[eval] 予測結果を保存: {args.output}")
+
+    del model, processor, tokenizer
+    torch.cuda.empty_cache()
 
     return accuracy
 

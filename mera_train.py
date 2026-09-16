@@ -50,6 +50,7 @@ MERA 順次学習パイプライン（RunPod 上で実行するスクリプト�
 import os
 import sys
 import torch
+import transformers
 
 import config
 from mera import mera_step1, get_step2_training_flags, assemble_final_model
@@ -61,13 +62,21 @@ DEEPSPEED_CONFIG = os.path.join(REPO_DIR, "scripts", "zero2_cpu_offload.json")
 
 # ── 再開ロジック補助関数 ───────────────────────────────────────────────────────
 
-def _already_done(path: str, name: str) -> bool:
+def _already_done(path: str, name: str, marker: str = "config.json") -> bool:
     """
-    path のディレクトリが既に存在する場合はスキップし True を返す。
-    クラッシュ後の再開時に完了済みステップを飛ばすために使う。
+    path/marker が存在する場合はスキップし True を返す。
+    ディレクトリ存在だけで判定すると OOM クラッシュ後の空ディレクトリを誤検知するため、
+    そのステップが実際に書く決定的なファイルの存在で判定する。
+
+    marker の目安:
+      LoRA 系    : "adapter_config.json"
+      フルモデル系: "config.json"（デフォルト）
+      Step2a     : "mm_projector.bin"
+      Step2b     : "mm_projector_a.bin"
     """
-    if os.path.exists(path):
-        print(f"[skip] {name} → 出力済みのためスキップ: {path}")
+    marker_path = os.path.join(path, marker)
+    if os.path.exists(marker_path):
+        print(f"[skip] {name} → 完了マーカー検出のためスキップ: {marker_path}")
         return True
     return False
 
@@ -114,6 +123,8 @@ def _merge_lora_and_save(base_path: str, lora_path: str, save_path: str) -> None
 
     os.makedirs(save_path, exist_ok=True)
     model.save_pretrained(save_path)
+    tokenizer = transformers.AutoTokenizer.from_pretrained(base_path, use_fast=True)
+    tokenizer.save_pretrained(save_path)
     print(f"[lora_merge] 保存完了: {save_path}")
 
     del model
@@ -158,6 +169,8 @@ def _apply_mera_step1_and_save(
 
     os.makedirs(save_dir, exist_ok=True)
     model.save_pretrained(save_dir)
+    tokenizer = transformers.AutoTokenizer.from_pretrained(config.BASE_MODEL, use_fast=True)
+    tokenizer.save_pretrained(save_dir)
     print(f"[MERA Step1] マージ済みモデルを保存: {save_dir}")
 
     del model
@@ -183,6 +196,9 @@ def _assemble_final_model() -> None:
         save_path        = config.CKPT_FINAL,
     )
 
+    tokenizer = transformers.AutoTokenizer.from_pretrained(config.BASE_MODEL, use_fast=True)
+    tokenizer.save_pretrained(config.CKPT_FINAL)
+
 
 # ── パイプライン ──────────────────────────────────────────────────────────────
 
@@ -194,8 +210,8 @@ if __name__ == "__main__":
     print("\n" + "="*60)
     print("Phase 1: 画像学習（MSCOCO + OK-VQA）→ θ_1")
     print("="*60)
-    if not _already_done(config.CKPT_PHASE1, "Phase1（マージ済みモデル）"):
-        if not _already_done(config.CKPT_PHASE1_LORA, "Phase1（LoRA 学習）"):
+    if not _already_done(config.CKPT_PHASE1, "Phase1（マージ済みモデル）", "config.json"):
+        if not _already_done(config.CKPT_PHASE1_LORA, "Phase1（LoRA 学習）", "adapter_config.json"):
             train_image(
                 model_path      = config.BASE_MODEL,
                 data_json       = config.IMAGE_DATA_JSON,
@@ -204,7 +220,7 @@ if __name__ == "__main__":
                 vision_tower    = config.VISION_TOWER,
                 lora_enable     = True,
                 lora_r          = 128,
-                lora_alpha      = 256,
+                lora_alpha      = 128,
                 deepspeed_config= DEEPSPEED_CONFIG,
                 num_gpus        = config.NUM_GPUS,
             )
@@ -221,8 +237,8 @@ if __name__ == "__main__":
     print("\n" + "="*60)
     print("Phase 2: 音声学習（AudioCaps + Clotho-AQA）→ θ_{2,vanilla}")
     print("="*60)
-    if not _already_done(config.CKPT_AUDIO_VANILLA, "Phase2（マージ済みモデル）"):
-        if not _already_done(config.CKPT_AUDIO_VANILLA_LORA, "Phase2（LoRA 学習）"):
+    if not _already_done(config.CKPT_AUDIO_VANILLA, "Phase2（マージ済みモデル）", "config.json"):
+        if not _already_done(config.CKPT_AUDIO_VANILLA_LORA, "Phase2（LoRA 学習）", "adapter_config.json"):
             train_audio(
                 model_path      = config.CKPT_PHASE1,
                 data_json       = config.AUDIO_DATA_JSON,
@@ -232,7 +248,7 @@ if __name__ == "__main__":
                 mm_projector_lr = 2e-5,
                 lora_enable     = True,
                 lora_r          = 128,
-                lora_alpha      = 256,
+                lora_alpha      = 128,
                 deepspeed_config= DEEPSPEED_CONFIG,
                 num_gpus        = config.NUM_GPUS,
             )
@@ -249,7 +265,7 @@ if __name__ == "__main__":
     print("\n" + "="*60)
     print("MERA Step1: LLM 重みマージ（θ_1 + θ_{2,vanilla}）→ θ_{2,merged}")
     print("="*60)
-    if not _already_done(config.CKPT_MERGED, "Step1（LLM マージ）"):
+    if not _already_done(config.CKPT_MERGED, "Step1（LLM マージ）", "config.json"):
         _apply_mera_step1_and_save(
             audio_vanilla_dir = config.CKPT_AUDIO_VANILLA,
             prev_dir          = config.CKPT_PHASE1,
@@ -264,7 +280,7 @@ if __name__ == "__main__":
     print("\n" + "="*60)
     print("MERA Step2a: 画像コネクタ ReAlign")
     print("="*60)
-    if not _already_done(config.CKPT_IMG_REALIGNED, "Step2a（画像コネクタ ReAlign）"):
+    if not _already_done(config.CKPT_IMG_REALIGNED, "Step2a（画像コネクタ ReAlign）", "mm_projector.bin"):
         step2 = get_step2_training_flags()
         train_image(
             model_path          = config.CKPT_MERGED,
@@ -286,7 +302,7 @@ if __name__ == "__main__":
     print("\n" + "="*60)
     print("MERA Step2b: 音声コネクタ ReAlign")
     print("="*60)
-    if not _already_done(config.CKPT_AUD_REALIGNED, "Step2b（音声コネクタ ReAlign）"):
+    if not _already_done(config.CKPT_AUD_REALIGNED, "Step2b（音声コネクタ ReAlign）", "mm_projector_a.bin"):
         step2 = get_step2_training_flags()
         train_audio(
             model_path            = config.CKPT_MERGED,
@@ -307,7 +323,7 @@ if __name__ == "__main__":
     print("\n" + "="*60)
     print("MERA Assemble: 最終モデル組み立て")
     print("="*60)
-    if not _already_done(config.CKPT_FINAL, "Assemble（最終モデル）"):
+    if not _already_done(config.CKPT_FINAL, "Assemble（最終モデル）", "config.json"):
         _assemble_final_model()
 
     print("\n" + "="*60)

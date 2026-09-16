@@ -39,7 +39,7 @@ def train_image(
     tune_mm_mlp_adapter: bool = False,
     lora_enable: bool = False,
     lora_r: int = 128,
-    lora_alpha: int = 256,
+    lora_alpha: int = 128,
     deepspeed_config: str | None = None,
     lr: float = 2e-4,
     mm_projector_lr: float = 2e-5,
@@ -60,7 +60,7 @@ def train_image(
         tune_mm_mlp_adapter : True = コネクタのみ学習（Step2a ReAlign 用）
         lora_enable         : True = LoRA で LLM を学習（Phase1 用）
         lora_r              : LoRA rank（論文 Appendix C.1 = 128）
-        lora_alpha          : LoRA alpha（= 2 × lora_r）
+        lora_alpha          : LoRA alpha（論文 Appendix C.1 = 128、alpha/r=1.0）
         deepspeed_config    : DeepSpeed 設定 JSON のパス。None でオフ
         lr                  : LLM の学習率
         mm_projector_lr     : コネクタの学習率
@@ -129,7 +129,7 @@ def train_audio(
     tune_mm_mlp_adapter_a: bool = False,
     lora_enable: bool = False,
     lora_r: int = 128,
-    lora_alpha: int = 256,
+    lora_alpha: int = 128,
     deepspeed_config: str | None = None,
     lr: float = 2e-5,
     mm_projector_lr: float | None = None,
@@ -155,7 +155,7 @@ def train_audio(
                                 True  = 音声コネクタのみ学習（Step2b ReAlign 用）
         lora_enable           : True = LoRA で LLM を学習（Phase2 用）
         lora_r                : LoRA rank（論文 Appendix C.1 = 128）
-        lora_alpha            : LoRA alpha（= 2 × lora_r）
+        lora_alpha            : LoRA alpha（論文 Appendix C.1 = 128、alpha/r=1.0）
         deepspeed_config      : DeepSpeed 設定 JSON のパス。None でオフ
         lr                    : LLM・音声エンコーダの学習率
         mm_projector_lr       : 音声コネクタ（mm_projector_a）の学習率。

@@ -128,6 +128,7 @@ def safe_save_model_for_hf_trainer(trainer: Trainer,
                 torch.save(weight_to_save, os.path.join(mm_projector_folder, f'{current_folder}.bin'))
             else:
                 torch.save(weight_to_save, os.path.join(output_dir, f'mm_projector_a.bin'))
+        return
 
     elif getattr(trainer.args, "pretrain_mm_mlp_adapter_a", False):
         # Only save Adapter
