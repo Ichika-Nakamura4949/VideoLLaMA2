@@ -15,7 +15,16 @@ MERA 実験の設定ファイル。RunPod 実行前にここだけ変更すれ�
 # ── モデル ──────────────────────────────────────────────────────────────────
 
 # VideoLLaMA2.1-7B-AV: Qwen2-7B + SigLIP + BEATs の事前学習済みモデル
+# NOTE: LLMバックボーンをQwen2.5-1.5Bに差し替える方針に伴い、
+#       BASE_MODELは現在未使用（Pre-Training/Phase1をLLM_BACKBONEから開始するため）。
+#       Qwen2-7B版に戻す場合の参照用に残している。
 BASE_MODEL   = "DAMO-NLP-SG/VideoLLaMA2.1-7B-AV"
+
+# 差し替え後のLLMバックボーン（VideoLLaMA2付属のQwen2-7Bではなく、Qwen2.5-1.5Bを使用）
+# model_type="qwen2"・hidden_size=1536でQwen2-7Bと同一アーキテクチャクラス
+# （Videollama2Qwen2ForCausalLM）にそのまま読み込める（config.json確認済み）。
+# マルチモーダルの事前学習は一切されていないため、Pre-Training段階から開始する。
+LLM_BACKBONE = "Qwen/Qwen2.5-1.5B-Instruct"
 
 # ビジョンエンコーダ（VideoLLaMA2.1 系列で使われる SigLIP）
 VISION_TOWER = "google/siglip-so400m-patch14-384"
@@ -31,6 +40,11 @@ IMAGE_DATA_JSON    = "/workspace/data/image_train.json"   # MSCOCO + OK-VQA
 IMAGE_DATA_FOLDER  = "/workspace/data"
 AUDIO_DATA_JSON    = "/workspace/data/audio_train.json"   # AudioCaps + Clotho-AQA
 
+# Pre-Training用（Capのみ。MERA論文Table 9のPre-Training段階に対応）
+# build_dataset.pyが生成する中間ファイルをそのまま使う（マージ前のCap単体データ）
+IMAGE_PRETRAIN_JSON = "/workspace/data/intermediate/mscoco_train.json"     # 画像コネクタ初期学習用
+AUDIO_PRETRAIN_JSON = "/workspace/data/intermediate/audiocaps_train.json" # 音声コネクタ初期学習用
+
 # Step2 ReAlign 用 replay セット（各モダリティのサブセット）
 IMAGE_REPLAY_JSON   = "/workspace/data/replay_image.json"
 IMAGE_REPLAY_FOLDER = "/workspace/data"
@@ -39,6 +53,11 @@ AUDIO_REPLAY_JSON   = "/workspace/data/replay_audio.json"
 # ── チェックポイント出力先 ─────────────────────────────────────────────────
 
 CKPT_DIR                = "/workspace/output/mera"
+
+# Pre-Training チェックポイント（LLM_BACKBONE + SigLIP/BEATs のコネクタを
+# ランダム初期化から学習した結果。Phase1/Phase2の出発点になる）
+CKPT_IMG_PRETRAIN = f"{CKPT_DIR}/pretrain_image"   # LLM_BACKBONE + SigLIP + 学習済みmm_projector
+CKPT_AUD_PRETRAIN = f"{CKPT_DIR}/pretrain_audio"   # CKPT_IMG_PRETRAIN + BEATs + 学習済みmm_projector_a
 
 # LoRA チェックポイント（マージ前）
 CKPT_PHASE1_LORA        = f"{CKPT_DIR}/phase1_image_lora"         # θ_1 LoRA adapter
