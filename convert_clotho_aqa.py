@@ -1,17 +1,15 @@
 """
 Clotho-AQA を VideoLLaMA2 学習/評価用 JSON に変換する。
 
-Clotho-AQA のディレクトリ構造（zip 展開後）:
+Clotho-AQA のディレクトリ構造（zip 展開後、2026-09-18に実機で確認済み。
+train/val/test 別フォルダには分かれておらず、音声ファイルは1フォルダにまとまっている点に注意）:
   /workspace/data/audio/clotho_aqa/
-  ├── audio/
-  │   ├── train/  ←音声ファイル（.wav）
-  │   ├── val/
-  │   └── test/
+  ├── audio_files/    ←音声ファイル（.wav）。splitの区別はCSV側にしかない
   ├── clotho_aqa_train.csv
   ├── clotho_aqa_val.csv
   └── clotho_aqa_test.csv
 
-CSV 列: file_name, question, answer
+CSV 列: file_name, QuestionText, answer, confidence
 
 出力:
   /workspace/data/intermediate/clotho_aqa_train.json
@@ -26,18 +24,18 @@ from pathlib import Path
 
 
 CLOTHO_ROOT  = Path("/workspace/data/audio/clotho_aqa")
+AUDIO_DIR    = CLOTHO_ROOT / "audio_files"
 OUT_DIR      = Path("/workspace/data/intermediate")
 
 SPLITS = {
-    "train": ("clotho_aqa_train.csv", "train"),
-    "val":   ("clotho_aqa_val.csv",   "val"),
-    "test":  ("clotho_aqa_test.csv",  "test"),
+    "train": "clotho_aqa_train.csv",
+    "val":   "clotho_aqa_val.csv",
+    "test":  "clotho_aqa_test.csv",
 }
 
 
-def convert(csv_filename: str, audio_split: str, out_path: Path) -> None:
-    csv_path  = CLOTHO_ROOT / csv_filename
-    audio_dir = CLOTHO_ROOT / "audio" / audio_split
+def convert(csv_filename: str, out_path: Path) -> None:
+    csv_path = CLOTHO_ROOT / csv_filename
 
     if not csv_path.exists():
         print(f"[Clotho-AQA] {csv_path} が見つかりません。スキップ")
@@ -51,16 +49,15 @@ def convert(csv_filename: str, audio_split: str, out_path: Path) -> None:
     with open(csv_path, newline="") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            wav_file = audio_dir / row["file_name"]
+            wav_file = AUDIO_DIR / row["file_name"]
             if not wav_file.exists():
                 skipped += 1
                 continue
-            abs_path = str(audio_dir / row["file_name"])
             entries.append({
                 "id": str(entry_id),
-                "audio": abs_path,
+                "audio": str(wav_file),
                 "conversations": [
-                    {"from": "human", "value": f"<audio>\n{row['question']}"},
+                    {"from": "human", "value": f"<audio>\n{row['QuestionText']}"},
                     {"from": "gpt",   "value": row["answer"]},
                 ],
             })
@@ -69,13 +66,12 @@ def convert(csv_filename: str, audio_split: str, out_path: Path) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w") as f:
         json.dump(entries, f, ensure_ascii=False, indent=2)
-    print(f"[Clotho-AQA] {audio_split}: {len(entries)} エントリ（{skipped} スキップ）→ {out_path}")
+    print(f"[Clotho-AQA] {csv_filename}: {len(entries)} エントリ（{skipped} スキップ）→ {out_path}")
 
 
 if __name__ == "__main__":
-    for split_name, (csv_file, audio_split) in SPLITS.items():
+    for split_name, csv_file in SPLITS.items():
         convert(
             csv_filename = csv_file,
-            audio_split  = audio_split,
             out_path     = OUT_DIR / f"clotho_aqa_{split_name}.json",
         )
