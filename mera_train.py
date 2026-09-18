@@ -17,10 +17,10 @@ Qwen2.5-1.5B（config.LLM_BACKBONE）に差し替えたため、Phase1の前に
              ※ 評価①: eval_vqa.py --model CKPT_PHASE1 --eval-json image_eval.json
                 → 画像スコアA（BRGの分母）
 
-  Pre-Training（音声）: θ_1 + BEATs のコネクタをランダム初期化から学習（AudioCapsのみ）
+  Pre-Training（音声）: θ_1 + BEATs のコネクタをランダム初期化から学習（Clothoのみ、2026-09-18にAudioCapsから変更）
              → CKPT_AUD_PRETRAIN/（フルモデル）
 
-  Phase2  : CKPT_AUD_PRETRAIN を出発点に音声モダリティを素直に LoRA FT（AudioCaps + Clotho-AQA）
+  Phase2  : CKPT_AUD_PRETRAIN を出発点に音声モダリティを素直に LoRA FT（Clotho-AQA、confidence="yes"フィルタ済み）
              → CKPT_AUDIO_VANILLA_LORA/（LoRA adapter）
              → LoRA マージ → CKPT_AUDIO_VANILLA/（θ_{2,vanilla} 完全モデル）
              ※ 評価②: eval_vqa.py --model CKPT_AUDIO_VANILLA --eval-json audio_eval.json
@@ -394,7 +394,7 @@ if __name__ == "__main__":
     # ─────────────────────────────────────────────────────────────────────────
     # Pre-Training（音声）: θ_1（CKPT_PHASE1）を出発点に、BEATs を繋ぐコネクタを
     #   ランダム初期化から学習する（論文 Table 9 の Pre-Training 段階に対応）
-    #   LLM・音声エンコーダ完全凍結・LoRA不要・Capのみ（AudioCaps）
+    #   LLM・音声エンコーダ完全凍結・LoRA不要・Capのみ（Clotho、2026-09-18にAudioCapsから変更）
     #   → CKPT_AUD_PRETRAIN（θ_1 + BEATs + 学習済み mm_projector_a のフルモデル）
     # ─────────────────────────────────────────────────────────────────────────
     print("\n" + "="*60)
@@ -427,7 +427,7 @@ if __name__ == "__main__":
     #   CL 手法なし（これが MERA 論文の「vanilla model」）
     # ─────────────────────────────────────────────────────────────────────────
     print("\n" + "="*60)
-    print("Phase 2: 音声学習（AudioCaps + Clotho-AQA）→ θ_{2,vanilla}")
+    print("Phase 2: 音声学習（Clotho-AQA）→ θ_{2,vanilla}")
     print("="*60)
     if not _already_done(config.CKPT_AUDIO_VANILLA, "Phase2（マージ済みモデル）", "config.json"):
         if not _already_done(config.CKPT_AUDIO_VANILLA_LORA, "Phase2（LoRA 学習）", "adapter_config.json"):
