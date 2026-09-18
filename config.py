@@ -38,12 +38,12 @@ BEATS_TOWER  = "/workspace/BEATs_iter3_plus_AS2M_finetuned_on_AS2M_cpt2.pt"
 
 IMAGE_DATA_JSON    = "/workspace/data/image_train.json"   # MSCOCO + OK-VQA
 IMAGE_DATA_FOLDER  = "/workspace/data"
-AUDIO_DATA_JSON    = "/workspace/data/audio_train.json"   # AudioCaps + Clotho-AQA
+AUDIO_DATA_JSON    = "/workspace/data/audio_train.json"   # Clotho-AQA（confidence="yes"フィルタ済み）
 
 # Pre-Training用（Capのみ。MERA論文Table 9のPre-Training段階に対応）
 # build_dataset.pyが生成する中間ファイルをそのまま使う（マージ前のCap単体データ）
-IMAGE_PRETRAIN_JSON = "/workspace/data/intermediate/mscoco_train.json"     # 画像コネクタ初期学習用
-AUDIO_PRETRAIN_JSON = "/workspace/data/intermediate/audiocaps_train.json" # 音声コネクタ初期学習用
+IMAGE_PRETRAIN_JSON = "/workspace/data/intermediate/mscoco_train.json"  # 画像コネクタ初期学習用
+AUDIO_PRETRAIN_JSON = "/workspace/data/intermediate/clotho_train.json"  # 音声コネクタ初期学習用（AudioCapsから変更、2026-09-18）
 
 # Step2 ReAlign 用 replay セット（各モダリティのサブセット）
 IMAGE_REPLAY_JSON   = "/workspace/data/replay_image.json"

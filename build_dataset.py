@@ -10,9 +10,12 @@
   - /workspace/data/coco/images/val2014/      （MSCOCO val 画像、BRG 評価用）
   - /workspace/data/coco/annotations/         （captions_train2014.json 等）
   - /workspace/data/okvqa/                    （OK-VQA の questions/annotations JSON）
-  - /workspace/data/audio/audiocaps/train/    （yt-dlp でダウンロードした wav ファイル）
-  - /workspace/data/audio/audiocaps/train.csv
+  - /workspace/data/audio/clotho/development/       （Clotho v2、7z 展開済み。Pre-Training用）
+  - /workspace/data/audio/clotho/clotho_captions_development.csv
   - /workspace/data/audio/clotho_aqa/         （zip 展開済み、全 split 含む）
+
+AudioCapsは2026-09-18にClothoへ差し替え（YouTube由来データの取得が実運用上
+困難だったため。詳細はフェーズ3/進捗メモ参照）。
 
 生成物:
   /workspace/data/intermediate/   ← 各データセット単体の変換結果（中間ファイル）
@@ -20,13 +23,13 @@
     mscoco_val.json
     okvqa_train.json
     okvqa_val.json
-    audiocaps_train.json
+    clotho_train.json
     clotho_aqa_train.json
     clotho_aqa_test.json
 
   /workspace/data/               ← mera_train.py / 評価スクリプトが直接参照する JSON
     image_train.json             ← Phase 1 学習用（mscoco_train + okvqa_train）
-    audio_train.json             ← Phase 2 学習用（audiocaps_train + clotho_aqa_train）
+    audio_train.json             ← Phase 2 学習用（clotho_aqa_train）
     image_eval.json              ← BRG 評価用（okvqa_val）
     audio_eval.json              ← FRG 評価用（clotho_aqa_test）
     replay_image.json            ← Step 2a 用（image_train のサブセット）
@@ -44,7 +47,7 @@ INTER_DIR = DATA_DIR / "intermediate"
 SCRIPTS = [
     "convert_mscoco.py",
     "convert_okvqa.py",
-    "convert_audiocaps.py",
+    "convert_clotho.py",
     "convert_clotho_aqa.py",
 ]
 
@@ -86,8 +89,10 @@ if __name__ == "__main__":
     )
 
     # Phase 2 学習用（音声）
+    # AudioCapsは2026-09-18にClothoへ差し替え。Pre-Training専用（AUDIO_PRETRAIN_JSON）に
+    # 回ったため、Phase 2本番学習はClotho-AQA単体になった（論文のAudioCaps+Clotho-AQA構成から変更）
     merge(
-        paths    = [INTER_DIR / "audiocaps_train.json", INTER_DIR / "clotho_aqa_train.json"],
+        paths    = [INTER_DIR / "clotho_aqa_train.json"],
         out_path = DATA_DIR / "audio_train.json",
     )
 
