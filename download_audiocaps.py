@@ -10,6 +10,12 @@ ffmpeg で start_time から 10 秒を切り出すことで wav を作る。
   pip install yt-dlp
   apt-get install -y ffmpeg
 
+YouTube はデータセンター系IPからのアクセスを bot 判定でブロックすることがあり
+（"Sign in to confirm you're not a bot"）、その場合は全件が同じ理由で失敗する
+（2026-09-18に実機で確認済み）。対処として、ブラウザ（ログイン済み）から書き出した
+Cookie を /workspace/cookies.txt に置いておくと、存在すれば自動で --cookies オプション
+として使う。
+
 使い方:
   python download_audiocaps.py
 
@@ -30,9 +36,15 @@ from pathlib import Path
 CSV_PATH      = Path("/workspace/data/audio/audiocaps/train.csv")
 OUT_DIR       = Path("/workspace/data/audio/audiocaps/train")
 FAILED_LOG    = Path("/workspace/data/audio/audiocaps/failed_audiocaps.txt")
+COOKIES_PATH  = Path("/workspace/cookies.txt")  # Mac側ブラウザから書き出したYouTube Cookie（あれば使う）
 CLIP_DURATION = 10     # AudioCaps のクリップ長は常に 10 秒
 SLEEP_SEC     = 1.0    # ダウンロード間隔（レートリミット対策）
 SAMPLE_RATE   = 16000  # BEATs の標準入力サンプリングレート
+
+
+def _last_stderr_line(result: subprocess.CompletedProcess) -> str:
+    lines = result.stderr.decode(errors="replace").strip().splitlines()
+    return lines[-1] if lines else "(stderrなし)"
 
 
 def download_clip(youtube_id: str, start_time: float, out_path: Path) -> bool:
@@ -40,19 +52,21 @@ def download_clip(youtube_id: str, start_time: float, out_path: Path) -> bool:
     tmp_template = str(out_path.parent / f"{youtube_id}.tmp.%(ext)s")
     tmp_wav      = out_path.parent / f"{youtube_id}.tmp.wav"
 
+    cmd = [
+        "yt-dlp",
+        "-x", "--audio-format", "wav",
+        "--audio-quality", "0",
+        "--no-playlist",
+        "-o", tmp_template,
+    ]
+    if COOKIES_PATH.exists():
+        cmd += ["--cookies", str(COOKIES_PATH)]
+    cmd.append(url)
+
     # yt-dlp: 最良音質を wav に変換してダウンロード
-    dl = subprocess.run(
-        [
-            "yt-dlp",
-            "-x", "--audio-format", "wav",
-            "--audio-quality", "0",
-            "--no-playlist",
-            "-o", tmp_template,
-            url,
-        ],
-        capture_output=True,
-    )
+    dl = subprocess.run(cmd, capture_output=True)
     if dl.returncode != 0 or not tmp_wav.exists():
+        print(f"  -> yt-dlp失敗: {_last_stderr_line(dl)}")
         return False
 
     # ffmpeg: start_time から 10 秒を切り出して 16 kHz モノラルに変換
@@ -69,11 +83,15 @@ def download_clip(youtube_id: str, start_time: float, out_path: Path) -> bool:
         capture_output=True,
     )
     tmp_wav.unlink(missing_ok=True)
-    return trim.returncode == 0
+    if trim.returncode != 0:
+        print(f"  -> ffmpeg失敗: {_last_stderr_line(trim)}")
+        return False
+    return True
 
 
 if __name__ == "__main__":
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    print(f"Cookie使用: {'あり (' + str(COOKIES_PATH) + ')' if COOKIES_PATH.exists() else 'なし'}")
 
     with open(CSV_PATH, newline="") as f:
         rows = list(csv.DictReader(f))
