@@ -9,12 +9,18 @@ ffmpeg で start_time から 10 秒を切り出すことで wav を作る。
 必要ツール（RunPod 環境）:
   pip install yt-dlp
   apt-get install -y ffmpeg
+  Node.js（--js-runtimes node 用。nvm等で導入済みなら可）
 
-YouTube はデータセンター系IPからのアクセスを bot 判定でブロックすることがあり
-（"Sign in to confirm you're not a bot"）、その場合は全件が同じ理由で失敗する
-（2026-09-18に実機で確認済み）。対処として、ブラウザ（ログイン済み）から書き出した
-Cookie を /workspace/cookies.txt に置いておくと、存在すれば自動で --cookies オプション
-として使う。
+YouTube 対策として2つの回避策が必要なことを実機で確認済み（2026-09-18）。
+
+1. データセンター系IPからのアクセスを bot 判定でブロックされる
+   （"Sign in to confirm you're not a bot"）。対処として、ブラウザ（ログイン済み）
+   から書き出した Cookie を /workspace/cookies.txt に置いておくと、存在すれば
+   自動で --cookies オプションとして使う。
+2. YouTube の「n challenge」（署名解読）を解くのに JavaScript ランタイムと
+   専用ソルバースクリプトが必要（"n challenge solving failed" / "The page needs
+   to be reloaded" エラーになる）。--js-runtimes node と --remote-components
+   ejs:github を常時付与することで解決する（コード側で対応済み、追加設定不要）。
 
 使い方:
   python download_audiocaps.py
@@ -57,6 +63,8 @@ def download_clip(youtube_id: str, start_time: float, out_path: Path) -> bool:
         "-x", "--audio-format", "wav",
         "--audio-quality", "0",
         "--no-playlist",
+        "--js-runtimes", "node",
+        "--remote-components", "ejs:github",
         "-o", tmp_template,
     ]
     if COOKIES_PATH.exists():
