@@ -1,0 +1,1185 @@
+Script started on 2026-09-20 17:27:15+00:00 [TERM="tmux-256color" TTY="/dev/pts/0" COLUMNS="162" LINES="21"]
+ _____                             _ 
+|  __ \                           | |
+| |__) |   _ _ __  _ __   ___   __| |
+|  _  / | | | '_ \| '_ \ / _ \ / _` |
+| | \ \ |_| | | | | |_) | (_) | (_| |
+|_|  \_\__,_|_| |_| .__/ \___/ \__,_|
+                  | |                
+                  |_|                
+For detailed documentation and guides, please visit:
+[1;34mhttps://docs.runpod.io/[0m and [1;34mhttps://blog.runpod.io/[0m
+
+
+[?2004hroot@e532743765e5:/# [7mcd /workspace/MERAモデル[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccd /workspace/MERAモデル
+[?2004l[?2004hroot@e532743765e5:/workspace/MERAモデル# [7mpython mera_train.py[27mpython mera_train.py
+[?2004lTraceback (most recent call last):
+  File "/workspace/MERAモデル/mera_train.py", line 65, in <module>
+    import transformers
+ModuleNotFoundError: No module named 'transformers'
+[?2004hroot@e532743765e5:/workspace/MERAモデル# [7msource /workspace/venv/bin/activate[27msource /workspace/venv/bin/activate
+[?2004l[?2004h(venv) root@e532743765e5:/workspace/MERAモデル# [7mpython mera_train.py[27mpython mera_train.py
+[?2004l/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+
+============================================================
+Pre-Training（画像）: LLM_BACKBONE ↔ SigLIP コネクタの初期学習
+============================================================
+
+============================================================
+[torchrun] torchrun --nproc_per_node=1 --master_port=29500 /workspace/MERAモデル/videollama2/train.py --model_type videollama2_qwen2 ...
+============================================================
+
+Traceback (most recent call last):
+  File "/workspace/MERAモデル/videollama2/train.py", line 33, in <module>
+    import transformers
+ModuleNotFoundError: No module named 'transformers'
+E0920 17:28:19.718000 18163 torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 18217) of binary: /usr/local/bin/python
+Traceback (most recent call last):
+  File "/usr/local/bin/torchrun", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/run.py", line 901, in main
+    run(args)
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/run.py", line 892, in run
+    elastic_launch(
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/launcher/api.py", line 143, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/launcher/api.py", line 277, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/workspace/MERAモデル/videollama2/train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-09-20_17:28:19
+  host      : e532743765e5
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 18217)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/workspace/MERAモデル/mera_train.py", line 347, in <module>
+    train_image(
+  File "/workspace/MERAモデル/train_runner.py", line 119, in train_image
+    _run(cmd)
+  File "/workspace/MERAモデル/train_runner.py", line 29, in _run
+    subprocess.run(cmd, cwd=REPO_DIR, check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nproc_per_node=1', '--master_port=29500', '/workspace/MERAモデル/videollama2/train.py', '--model_type', 'videollama2_qwen2', '--model_path', 'Qwen/Qwen2.5-1.5B-Instruct', '--vision_tower', 'google/siglip-so400m-patch14-384', '--mm_vision_select_layer', '-2', '--image_aspect_ratio', 'pad', '--num_frames', '16', '--data_path', '/workspace/data/intermediate/mscoco_train.json', '--data_folder', '/workspace/data', '--output_dir', '/workspace/output/mera/pretrain_image', '--bf16', 'True', '--tf32', 'True', '--fp16', 'False', '--num_train_epochs', '1', '--per_device_train_batch_size', '32', '--gradient_accumulation_steps', '4', '--learning_rate', '0.001', '--mm_projector_lr', '0.001', '--weight_decay', '0.', '--warmup_ratio', '0.03', '--lr_scheduler_type', 'cosine', '--model_max_length', '2048', '--lazy_preprocess', 'True', '--gradient_checkpointing', 'True', '--dataloader_num_workers', '4', '--save_strategy', 'epoch', '--save_only_model', 'True', '--tune_mm_mlp_adapter', 'True', '--report_to', 'tensorboard']' returned non-zero exit status 1.
+[?2004h(venv) root@e532743765e5:/workspace/MERAモデル# python mera_train.pysource /workspace/venv/bin/activate[15Ppython mera_train.py[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kcd /workspace/MERAモデルexit[Kcd /workspace/MERAモデル[Ksource /workspace/venv/bin/activate[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kpython mera_train.py
+[?2004l/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+
+============================================================
+Pre-Training（画像）: LLM_BACKBONE ↔ SigLIP コネクタの初期学習
+============================================================
+
+============================================================
+[torchrun] torchrun --nproc_per_node=1 --master_port=29500 /workspace/MERAモデル/videollama2/train.py --model_type videollama2_qwen2 ...
+============================================================
+
+/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Traceback (most recent call last):
+  File "/workspace/MERAモデル/videollama2/train.py", line 38, in <module>
+    from videollama2.model import *
+  File "/workspace/MERAモデル/videollama2/__init__.py", line 9, in <module>
+    from .model import load_pretrained_model
+  File "/workspace/MERAモデル/videollama2/model/__init__.py", line 29, in <module>
+    from .videollama2_gemma2 import Videollama2Gemma2ForCausalLM, Videollama2Gemma2Config
+  File "/workspace/MERAモデル/videollama2/model/videollama2_gemma2.py", line 23, in <module>
+    from transformers import AutoConfig, AutoModelForCausalLM, \
+ImportError: cannot import name 'Gemma2Config' from 'transformers' (/workspace/venv/lib/python3.12/site-packages/transformers/__init__.py)
+E0920 17:31:45.746000 18912 torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 18976) of binary: /workspace/venv/bin/python
+Traceback (most recent call last):
+  File "/workspace/venv/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/run.py", line 901, in main
+    run(args)
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/run.py", line 892, in run
+    elastic_launch(
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/launcher/api.py", line 143, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/launcher/api.py", line 277, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/workspace/MERAモデル/videollama2/train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-09-20_17:31:45
+  host      : e532743765e5
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 18976)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/workspace/MERAモデル/mera_train.py", line 347, in <module>
+    train_image(
+  File "/workspace/MERAモデル/train_runner.py", line 119, in train_image
+    _run(cmd)
+  File "/workspace/MERAモデル/train_runner.py", line 29, in _run
+    subprocess.run(cmd, cwd=REPO_DIR, check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nproc_per_node=1', '--master_port=29500', '/workspace/MERAモデル/videollama2/train.py', '--model_type', 'videollama2_qwen2', '--model_path', 'Qwen/Qwen2.5-1.5B-Instruct', '--vision_tower', 'google/siglip-so400m-patch14-384', '--mm_vision_select_layer', '-2', '--image_aspect_ratio', 'pad', '--num_frames', '16', '--data_path', '/workspace/data/intermediate/mscoco_train.json', '--data_folder', '/workspace/data', '--output_dir', '/workspace/output/mera/pretrain_image', '--bf16', 'True', '--tf32', 'True', '--fp16', 'False', '--num_train_epochs', '1', '--per_device_train_batch_size', '32', '--gradient_accumulation_steps', '4', '--learning_rate', '0.001', '--mm_projector_lr', '0.001', '--weight_decay', '0.', '--warmup_ratio', '0.03', '--lr_scheduler_type', 'cosine', '--model_max_length', '2048', '--lazy_preprocess', 'True', '--gradient_checkpointing', 'True', '--dataloader_num_workers', '4', '--save_strategy', 'epoch', '--save_only_model', 'True', '--tune_mm_mlp_adapter', 'True', '--report_to', 'tensorboard']' returned non-zero exit status 1.
+[?2004h(venv) root@e532743765e5:/workspace/MERAモデル# python mera_train.pysource /workspace/venv/bin/activate[Kcd /workspace/MERAモデルexit[Kgit add . && git commit -m "..." && git push origin main[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpython -c "import torch; print(torch.__version__, torch.cuda.is_available())"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cecho $HF_HOME[Kdu -sh /workspace/data /workspace/venvnvidia-smi[Ksource /workspace/venv/bin/activategit add pip_log.txt pip_log_deepspeed.txt pip_log_bnb.txt && git commit -m "log: RunPod RTX 4090 環境構築時のpipログ" && git push origin mainM[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpython build_dataset.py[K
+[KM[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccd /workspace/MERAモデルrm clotho_audio_development.7z[6Pcd /workspace/MERAモデル[1Ppython build_dataset.pygit add pip_log.txt pip_log_deepspeed.txt pip_log_bnb.txt && git commit -m "log: RunPod RTX 4090 環境構築時のpipログ" && git push origin mainM[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csource /workspace/venv/bin/activate[K
+[KM[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cnvidia-smi[K[K[K[K[K[K[K[K[K[K[Ksource /workspace/venv/bin/activate[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kpython mera_train.py
+[?2004l/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+
+============================================================
+Pre-Training（画像）: LLM_BACKBONE ↔ SigLIP コネクタの初期学習
+============================================================
+
+============================================================
+[torchrun] torchrun --nproc_per_node=1 --master_port=29500 /workspace/MERAモデル/videollama2/train.py --model_type videollama2_qwen2 ...
+============================================================
+
+/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/workspace/venv/lib/python3.12/site-packages/imageio_ffmpeg/_utils.py:7: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import resource_filename
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 446, in http_get
+[rank0]:     import hf_transfer  # type: ignore[no-redef]
+[rank0]:     ^^^^^^^^^^^^^^^^^^
+[rank0]: ModuleNotFoundError: No module named 'hf_transfer'
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/configuration_utils.py", line 689, in _get_config_dict
+[rank0]:     resolved_config_file = cached_file(
+[rank0]:                            ^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/utils/hub.py", line 402, in cached_file
+[rank0]:     resolved_file = hf_hub_download(
+[rank0]:                     ^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[rank0]:     return fn(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1221, in hf_hub_download
+[rank0]:     return _hf_hub_download_to_cache_dir(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1367, in _hf_hub_download_to_cache_dir
+[rank0]:     _download_to_tmp_and_move(
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1884, in _download_to_tmp_and_move
+[rank0]:     http_get(
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 448, in http_get
+[rank0]:     raise ValueError(
+[rank0]: ValueError: Fast download using 'hf_transfer' is enabled (HF_HUB_ENABLE_HF_TRANSFER=1) but 'hf_transfer' package is not available in your environment. Try `pip install hf_transfer`.
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/workspace/MERAモデル/videollama2/train.py", line 685, in <module>
+[rank0]:     train()
+[rank0]:   File "/workspace/MERAモデル/videollama2/train.py", line 477, in train
+[rank0]:     config = VLLMConfigs[model_args.model_type].from_pretrained(model_args.model_path, trust_remote_code=True)
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/configuration_utils.py", line 603, in from_pretrained
+[rank0]:     config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank0]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/configuration_utils.py", line 632, in get_config_dict
+[rank0]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank0]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/configuration_utils.py", line 710, in _get_config_dict
+[rank0]:     raise EnvironmentError(
+[rank0]: OSError: Can't load the configuration of 'Qwen/Qwen2.5-1.5B-Instruct'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'Qwen/Qwen2.5-1.5B-Instruct' is the correct path to a directory containing a config.json file
+[rank0]:[W920 17:39:19.499030656 ProcessGroupNCCL.cpp:1538] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+E0920 17:39:20.620000 19849 torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 19908) of binary: /workspace/venv/bin/python
+Traceback (most recent call last):
+  File "/workspace/venv/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/run.py", line 901, in main
+    run(args)
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/run.py", line 892, in run
+    elastic_launch(
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/launcher/api.py", line 143, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/launcher/api.py", line 277, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/workspace/MERAモデル/videollama2/train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-09-20_17:39:20
+  host      : e532743765e5
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 19908)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/workspace/MERAモデル/mera_train.py", line 347, in <module>
+    train_image(
+  File "/workspace/MERAモデル/train_runner.py", line 119, in train_image
+    _run(cmd)
+  File "/workspace/MERAモデル/train_runner.py", line 29, in _run
+    subprocess.run(cmd, cwd=REPO_DIR, check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nproc_per_node=1', '--master_port=29500', '/workspace/MERAモデル/videollama2/train.py', '--model_type', 'videollama2_qwen2', '--model_path', 'Qwen/Qwen2.5-1.5B-Instruct', '--vision_tower', 'google/siglip-so400m-patch14-384', '--mm_vision_select_layer', '-2', '--image_aspect_ratio', 'pad', '--num_frames', '16', '--data_path', '/workspace/data/intermediate/mscoco_train.json', '--data_folder', '/workspace/data', '--output_dir', '/workspace/output/mera/pretrain_image', '--bf16', 'True', '--tf32', 'True', '--fp16', 'False', '--num_train_epochs', '1', '--per_device_train_batch_size', '32', '--gradient_accumulation_steps', '4', '--learning_rate', '0.001', '--mm_projector_lr', '0.001', '--weight_decay', '0.', '--warmup_ratio', '0.03', '--lr_scheduler_type', 'cosine', '--model_max_length', '2048', '--lazy_preprocess', 'True', '--gradient_checkpointing', 'True', '--dataloader_num_workers', '4', '--save_strategy', 'epoch', '--save_only_model', 'True', '--tune_mm_mlp_adapter', 'True', '--report_to', 'tensorboard']' returned non-zero exit status 1.
+[?2004h(venv) root@e532743765e5:/workspace/MERAモデル# python mera_train.py
+[?2004l/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+
+============================================================
+Pre-Training（画像）: LLM_BACKBONE ↔ SigLIP コネクタの初期学習
+============================================================
+
+============================================================
+[torchrun] torchrun --nproc_per_node=1 --master_port=29500 /workspace/MERAモデル/videollama2/train.py --model_type videollama2_qwen2 ...
+============================================================
+
+/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/workspace/venv/lib/python3.12/site-packages/imageio_ffmpeg/_utils.py:7: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import resource_filename
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+config.json:   0%|                                                                                                                     | 0.00/660 [00:00<?, ?B/s]config.json: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████| 660/660 [00:00<00:00, 3.95MB/s]
+You are using a model of type qwen2 to instantiate a model of type videollama2_qwen2. This is not supported for all configurations of models and can yield errors.
+model.safetensors:   0%|                                                                                                             | 0.00/3.09G [00:00<?, ?B/s]model.safetensors:   0%|▎                                                                                                   | 10.5M/3.09G [00:01<06:40, 7.69MB/s]model.safetensors:   1%|▋                                                                                                   | 21.0M/3.09G [00:01<04:26, 11.5MB/s]model.safetensors:   4%|████▌                                                                                                 | 136M/3.09G [00:02<00:27, 107MB/s]model.safetensors:  12%|███████████▊                                                                                          | 357M/3.09G [00:02<00:08, 324MB/s]model.safetensors:  18%|██████████████████                                                                                    | 545M/3.09G [00:02<00:04, 519MB/s]model.safetensors:  24%|████████████████████████▏                                                                             | 734M/3.09G [00:02<00:04, 512MB/s]model.safetensors:  27%|███████████████████████████▋                                                                          | 839M/3.09G [00:02<00:03, 568MB/s]model.safetensors:  31%|███████████████████████████████▏                                                                      | 944M/3.09G [00:03<00:06, 328MB/s]model.safetensors:  33%|█████████████████████████████████▎                                                                   | 1.02G/3.09G [00:04<00:08, 257MB/s]model.safetensors:  35%|███████████████████████████████████▎                                                                 | 1.08G/3.09G [00:04<00:07, 258MB/s]model.safetensors:  43%|███████████████████████████████████████████▉                                                         | 1.34G/3.09G [00:04<00:03, 504MB/s]model.safetensors:  49%|█████████████████████████████████████████████████▋                                                   | 1.52G/3.09G [00:04<00:02, 662MB/s]model.safetensors:  55%|███████████████████████████████████████████████████████▏                                             | 1.69G/3.09G [00:04<00:01, 819MB/s]model.safetensors:  59%|████████████████████████████████████████████████████████████                                         | 1.84G/3.09G [00:04<00:01, 922MB/s]model.safetensors:  64%|████████████████████████████████████████████████████████████████▊                                    | 1.98G/3.09G [00:05<00:02, 397MB/s]model.safetensors:  68%|████████████████████████████████████████████████████████████████████▍                                | 2.09G/3.09G [00:06<00:04, 229MB/s]model.safetensors:  85%|██████████████████████████████████████████████████████████████████████████████████████▎              | 2.64G/3.09G [00:06<00:00, 552MB/s]model.safetensors:  94%|██████████████████████████████████████████████████████████████████████████████████████████████▍      | 2.89G/3.09G [00:07<00:00, 696MB/s]model.safetensors:  99%|███████████████████████████████████████████████████████████████████████████████████████████████████▉ | 3.06G/3.09G [00:08<00:00, 395MB/s]model.safetensors: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████▉| 3.09G/3.09G [00:08<00:00, 376MB/s]
+generation_config.json:   0%|                                                                                                          | 0.00/242 [00:00<?, ?B/s]generation_config.json: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 242/242 [00:00<00:00, 5.26MB/s]
+tokenizer_config.json: 0.00B [00:00, ?B/s]tokenizer_config.json: 7.30kB [00:00, 58.7MB/s]
+vocab.json: 0.00B [00:00, ?B/s]vocab.json: 2.78MB [00:00, 65.2MB/s]
+merges.txt: 0.00B [00:00, ?B/s]merges.txt: 1.67MB [00:00, 74.4MB/s]
+tokenizer.json: 0.00B [00:00, ?B/s]tokenizer.json: 7.03MB [00:00, 233MB/s]
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+preprocessor_config.json:   0%|                                                                                                        | 0.00/368 [00:00<?, ?B/s]preprocessor_config.json: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 368/368 [00:00<00:00, 7.32MB/s]
+config.json:   0%|                                                                                                                     | 0.00/576 [00:00<?, ?B/s]config.json: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████| 576/576 [00:00<00:00, 10.2MB/s]
+model.safetensors:   0%|                                                                                                             | 0.00/3.51G [00:00<?, ?B/s]model.safetensors:   0%|▎                                                                                                   | 10.5M/3.51G [00:01<06:31, 8.95MB/s]model.safetensors:   1%|▌                                                                                                   | 21.0M/3.51G [00:01<03:05, 18.8MB/s]model.safetensors:   2%|█▊                                                                                                  | 62.9M/3.51G [00:01<00:48, 71.1MB/s]model.safetensors:   3%|███                                                                                                   | 105M/3.51G [00:01<00:32, 106MB/s]model.safetensors:   4%|███▉                                                                                                  | 136M/3.51G [00:01<00:26, 129MB/s]model.safetensors:   5%|████▊                                                                                                 | 168M/3.51G [00:01<00:24, 137MB/s]model.safetensors:   6%|█████▊                                                                                                | 199M/3.51G [00:02<00:19, 167MB/s]model.safetensors:   7%|██████▋                                                                                               | 231M/3.51G [00:02<00:17, 192MB/s]model.safetensors:   8%|████████▏                                                                                             | 283M/3.51G [00:02<00:12, 255MB/s]model.safetensors:  10%|██████████                                                                                            | 346M/3.51G [00:02<00:09, 322MB/s]model.safetensors:  12%|████████████▏                                                                                         | 419M/3.51G [00:02<00:07, 407MB/s]model.safetensors:  15%|███████████████▏                                                                                      | 524M/3.51G [00:02<00:06, 496MB/s]model.safetensors:  18%|██████████████████▎                                                                                   | 629M/3.51G [00:02<00:04, 607MB/s]model.safetensors:  21%|█████████████████████                                                                                 | 724M/3.51G [00:02<00:04, 687MB/s]model.safetensors:  25%|█████████████████████████▉                                                                            | 891M/3.51G [00:03<00:02, 905MB/s]model.safetensors:  29%|████████████████████████████▉                                                                        | 1.01G/3.51G [00:03<00:02, 939MB/s]model.safetensors:  32%|███████████████████████████████▉                                                                     | 1.11G/3.51G [00:03<00:05, 432MB/s]model.safetensors:  34%|██████████████████████████████████                                                                   | 1.18G/3.51G [00:04<00:08, 276MB/s]model.safetensors:  36%|███████████████████████████████████▉                                                                 | 1.25G/3.51G [00:04<00:07, 288MB/s]model.safetensors:  37%|█████████████████████████████████████▍                                                               | 1.30G/3.51G [00:04<00:07, 281MB/s]model.safetensors:  40%|████████████████████████████████████████▍                                                            | 1.41G/3.51G [00:04<00:05, 380MB/s]model.safetensors:  44%|████████████████████████████████████████████▎                                                        | 1.54G/3.51G [00:04<00:03, 513MB/s]model.safetensors:  46%|██████████████████████████████████████████████▍                                                      | 1.61G/3.51G [00:05<00:03, 522MB/s]model.safetensors:  49%|█████████████████████████████████████████████████▊                                                   | 1.73G/3.51G [00:05<00:03, 576MB/s]model.safetensors:  55%|███████████████████████████████████████████████████████▏                                             | 1.92G/3.51G [00:05<00:01, 823MB/s]model.safetensors:  58%|██████████████████████████████████████████████████████████▏                                          | 2.02G/3.51G [00:05<00:01, 769MB/s]model.safetensors:  61%|█████████████████████████████████████████████████████████████▍                                       | 2.14G/3.51G [00:05<00:01, 696MB/s]model.safetensors:  63%|███████████████████████████████████████████████████████████████▉                                     | 2.22G/3.51G [00:06<00:06, 214MB/s]model.safetensors:  65%|█████████████████████████████████████████████████████████████████▋                                   | 2.29G/3.51G [00:07<00:05, 216MB/s]model.safetensors:  68%|█████████████████████████████████████████████████████████████████████                                | 2.40G/3.51G [00:07<00:03, 298MB/s]model.safetensors:  73%|█████████████████████████████████████████████████████████████████████████▊                           | 2.57G/3.51G [00:07<00:02, 448MB/s]model.safetensors:  76%|████████████████████████████████████████████████████████████████████████████▌                        | 2.66G/3.51G [00:07<00:01, 505MB/s]model.safetensors:  81%|█████████████████████████████████████████████████████████████████████████████████▍                   | 2.83G/3.51G [00:07<00:01, 660MB/s]model.safetensors:  85%|█████████████████████████████████████████████████████████████████████████████████████▉               | 2.99G/3.51G [00:07<00:00, 814MB/s]model.safetensors:  88%|█████████████████████████████████████████████████████████████████████████████████████████▏           | 3.10G/3.51G [00:07<00:00, 820MB/s]model.safetensors:  92%|████████████████████████████████████████████████████████████████████████████████████████████▌        | 3.22G/3.51G [00:08<00:00, 825MB/s]model.safetensors:  95%|███████████████████████████████████████████████████████████████████████████████████████████████▌     | 3.32G/3.51G [00:09<00:00, 313MB/s]model.safetensors: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████▉| 3.51G/3.51G [00:09<00:00, 375MB/s]
+Current model: Videollama2Qwen2ForCausalLM(
+  (model): Videollama2Qwen2Model(
+    (embed_tokens): Embedding(151936, 1536)
+    (layers): ModuleList(
+      (0-27): 28 x Qwen2DecoderLayer(
+        (self_attn): Qwen2SdpaAttention(
+          (q_proj): Linear(in_features=1536, out_features=1536, bias=True)
+          (k_proj): Linear(in_features=1536, out_features=256, bias=True)
+          (v_proj): Linear(in_features=1536, out_features=256, bias=True)
+          (o_proj): Linear(in_features=1536, out_features=1536, bias=False)
+          (rotary_emb): Qwen2RotaryEmbedding()
+        )
+        (mlp): Qwen2MLP(
+          (gate_proj): Linear(in_features=1536, out_features=8960, bias=False)
+          (up_proj): Linear(in_features=1536, out_features=8960, bias=False)
+          (down_proj): Linear(in_features=8960, out_features=1536, bias=False)
+          (act_fn): SiLU()
+        )
+        (input_layernorm): Qwen2RMSNorm()
+        (post_attention_layernorm): Qwen2RMSNorm()
+      )
+    )
+    (norm): Qwen2RMSNorm()
+    (vision_tower): SiglipVisionTower(
+      (vision_tower): SiglipVisionModel(
+        (vision_model): SiglipVisionTransformer(
+          (embeddings): SiglipVisionEmbeddings(
+            (patch_embedding): Conv2d(3, 1152, kernel_size=(14, 14), stride=(14, 14), padding=valid)
+            (position_embedding): Embedding(729, 1152)
+          )
+          (encoder): SiglipEncoder(
+            (layers): ModuleList(
+              (0-26): 27 x SiglipEncoderLayer(
+                (self_attn): SiglipAttention(
+                  (k_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                  (v_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                  (q_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                  (out_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                )
+                (layer_norm1): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+                (mlp): SiglipMLP(
+                  (activation_fn): PytorchGELUTanh()
+                  (fc1): Linear(in_features=1152, out_features=4304, bias=True)
+                  (fc2): Linear(in_features=4304, out_features=1152, bias=True)
+                )
+                (layer_norm2): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+              )
+            )
+          )
+          (post_layernorm): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+          (head): SiglipMultiheadAttentionPoolingHead(
+            (attention): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=1152, out_features=1152, bias=True)
+            )
+            (layernorm): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+            (mlp): SiglipMLP(
+              (activation_fn): PytorchGELUTanh()
+              (fc1): Linear(in_features=1152, out_features=4304, bias=True)
+              (fc2): Linear(in_features=4304, out_features=1152, bias=True)
+            )
+          )
+        )
+      )
+    )
+    (mm_projector): Linear(in_features=1152, out_features=1536, bias=True)
+  )
+  (lm_head): Linear(in_features=1536, out_features=151936, bias=False)
+)
+Formatting inputs...Skip in lazy mode
+  0%|                                                                                                                                   | 0/3235 [00:00<?, ?it/s][rank0]: Traceback (most recent call last):
+[rank0]:   File "/workspace/MERAモデル/videollama2/train.py", line 685, in <module>
+[rank0]:     train()
+[rank0]:   File "/workspace/MERAモデル/videollama2/train.py", line 668, in train
+[rank0]:     trainer.train()
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 1932, in train
+[rank0]:     return inner_training_loop(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 2268, in _inner_training_loop
+[rank0]:     tr_loss_step = self.training_step(model, inputs)
+[rank0]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 3307, in training_step
+[rank0]:     loss = self.compute_loss(model, inputs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 3338, in compute_loss
+[rank0]:     outputs = model(**inputs)
+[rank0]:               ^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/parallel/distributed.py", line 1648, in forward
+[rank0]:     else self._run_ddp_forward(*inputs, **kwargs)
+[rank0]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/parallel/distributed.py", line 1474, in _run_ddp_forward
+[rank0]:     return self.module(*inputs, **kwargs)  # type: ignore[index]
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/accelerate/utils/operations.py", line 687, in forward
+[rank0]:     return model_forward(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/accelerate/utils/operations.py", line 675, in __call__
+[rank0]:     return convert_to_fp32(self.model_forward(*args, **kwargs))
+[rank0]:                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/amp/autocast_mode.py", line 44, in decorate_autocast
+[rank0]:     return func(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/MERAモデル/videollama2/model/videollama2_qwen2.py", line 85, in forward
+[rank0]:     ) = self.prepare_inputs_labels_for_multimodal(
+[rank0]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/MERAモデル/videollama2/model/videollama2_arch.py", line 216, in prepare_inputs_labels_for_multimodal
+[rank0]:     mm_features = self.encode_images_or_videos(images)
+[rank0]:                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/MERAモデル/videollama2/model/videollama2_arch.py", line 175, in encode_images_or_videos
+[rank0]:     frames_features = self.get_model().get_vision_tower()(frames)
+[rank0]:                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+[rank0]:     return func(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/MERAモデル/videollama2/model/encoder.py", line 120, in forward
+[rank0]:     image_forward_outs = self.vision_tower(images, output_hidden_states=True)
+[rank0]:                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/models/siglip/modeling_siglip.py", line 1013, in forward
+[rank0]:     return self.vision_model(
+[rank0]:            ^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/models/siglip/modeling_siglip.py", line 914, in forward
+[rank0]:     encoder_outputs = self.encoder(
+[rank0]:                       ^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/models/siglip/modeling_siglip.py", line 719, in forward
+[rank0]:     layer_outputs = self._gradient_checkpointing_func(
+[rank0]:                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/_compile.py", line 53, in inner
+[rank0]:     return disable_fn(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/_dynamo/eval_frame.py", line 929, in _fn
+[rank0]:     return fn(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/utils/checkpoint.py", line 488, in checkpoint
+[rank0]:     return CheckpointFunction.apply(function, preserve, *args)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/autograd/function.py", line 576, in apply
+[rank0]:     return super().apply(*args, **kwargs)  # type: ignore[misc]
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/utils/checkpoint.py", line 262, in forward
+[rank0]:     outputs = run_function(*args)
+[rank0]:               ^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/models/siglip/modeling_siglip.py", line 470, in forward
+[rank0]:     hidden_states, attn_weights = self.self_attn(
+[rank0]:                                   ^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/models/siglip/modeling_siglip.py", line 390, in forward
+[rank0]:     attn_weights = torch.matmul(query_states, key_states.transpose(2, 3)) * self.scale
+[rank0]:                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 8.11 GiB. GPU 0 has a total capacity of 23.52 GiB of which 2.53 GiB is free. Including non-PyTorch memory, this process has 20.98 GiB memory in use. Of the allocated memory 17.96 GiB is allocated by PyTorch, and 2.12 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+  0%|                                                                                                                                   | 0/3235 [00:03<?, ?it/s]
+E0920 17:43:02.465000 20529 torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 20578) of binary: /workspace/venv/bin/python
+Traceback (most recent call last):
+  File "/workspace/venv/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/run.py", line 901, in main
+    run(args)
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/run.py", line 892, in run
+    elastic_launch(
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/launcher/api.py", line 143, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/launcher/api.py", line 277, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/workspace/MERAモデル/videollama2/train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-09-20_17:43:02
+  host      : e532743765e5
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 20578)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/workspace/MERAモデル/mera_train.py", line 347, in <module>
+    train_image(
+  File "/workspace/MERAモデル/train_runner.py", line 119, in train_image
+    _run(cmd)
+  File "/workspace/MERAモデル/train_runner.py", line 29, in _run
+    subprocess.run(cmd, cwd=REPO_DIR, check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nproc_per_node=1', '--master_port=29500', '/workspace/MERAモデル/videollama2/train.py', '--model_type', 'videollama2_qwen2', '--model_path', 'Qwen/Qwen2.5-1.5B-Instruct', '--vision_tower', 'google/siglip-so400m-patch14-384', '--mm_vision_select_layer', '-2', '--image_aspect_ratio', 'pad', '--num_frames', '16', '--data_path', '/workspace/data/intermediate/mscoco_train.json', '--data_folder', '/workspace/data', '--output_dir', '/workspace/output/mera/pretrain_image', '--bf16', 'True', '--tf32', 'True', '--fp16', 'False', '--num_train_epochs', '1', '--per_device_train_batch_size', '32', '--gradient_accumulation_steps', '4', '--learning_rate', '0.001', '--mm_projector_lr', '0.001', '--weight_decay', '0.', '--warmup_ratio', '0.03', '--lr_scheduler_type', 'cosine', '--model_max_length', '2048', '--lazy_preprocess', 'True', '--gradient_checkpointing', 'True', '--dataloader_num_workers', '4', '--save_strategy', 'epoch', '--save_only_model', 'True', '--tune_mm_mlp_adapter', 'True', '--report_to', 'tensorboard']' returned non-zero exit status 1.
+[?2004h(venv) root@e532743765e5:/workspace/MERAモデル# [7mpython mera_train.py[27m
+M[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpython mera_train.py
+M
+[?2004l/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+
+============================================================
+Pre-Training（画像）: LLM_BACKBONE ↔ SigLIP コネクタの初期学習
+============================================================
+
+============================================================
+[torchrun] torchrun --nproc_per_node=1 --master_port=29500 /workspace/MERAモデル/videollama2/train.py --model_type videollama2_qwen2 ...
+============================================================
+
+/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/workspace/venv/lib/python3.12/site-packages/imageio_ffmpeg/_utils.py:7: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import resource_filename
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+You are using a model of type qwen2 to instantiate a model of type videollama2_qwen2. This is not supported for all configurations of models and can yield errors.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Current model: Videollama2Qwen2ForCausalLM(
+  (model): Videollama2Qwen2Model(
+    (embed_tokens): Embedding(151936, 1536)
+    (layers): ModuleList(
+      (0-27): 28 x Qwen2DecoderLayer(
+        (self_attn): Qwen2SdpaAttention(
+          (q_proj): Linear(in_features=1536, out_features=1536, bias=True)
+          (k_proj): Linear(in_features=1536, out_features=256, bias=True)
+          (v_proj): Linear(in_features=1536, out_features=256, bias=True)
+          (o_proj): Linear(in_features=1536, out_features=1536, bias=False)
+          (rotary_emb): Qwen2RotaryEmbedding()
+        )
+        (mlp): Qwen2MLP(
+          (gate_proj): Linear(in_features=1536, out_features=8960, bias=False)
+          (up_proj): Linear(in_features=1536, out_features=8960, bias=False)
+          (down_proj): Linear(in_features=8960, out_features=1536, bias=False)
+          (act_fn): SiLU()
+        )
+        (input_layernorm): Qwen2RMSNorm()
+        (post_attention_layernorm): Qwen2RMSNorm()
+      )
+    )
+    (norm): Qwen2RMSNorm()
+    (vision_tower): SiglipVisionTower(
+      (vision_tower): SiglipVisionModel(
+        (vision_model): SiglipVisionTransformer(
+          (embeddings): SiglipVisionEmbeddings(
+            (patch_embedding): Conv2d(3, 1152, kernel_size=(14, 14), stride=(14, 14), padding=valid)
+            (position_embedding): Embedding(729, 1152)
+          )
+          (encoder): SiglipEncoder(
+            (layers): ModuleList(
+              (0-26): 27 x SiglipEncoderLayer(
+                (self_attn): SiglipAttention(
+                  (k_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                  (v_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                  (q_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                  (out_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                )
+                (layer_norm1): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+                (mlp): SiglipMLP(
+                  (activation_fn): PytorchGELUTanh()
+                  (fc1): Linear(in_features=1152, out_features=4304, bias=True)
+                  (fc2): Linear(in_features=4304, out_features=1152, bias=True)
+                )
+                (layer_norm2): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+              )
+            )
+          )
+          (post_layernorm): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+          (head): SiglipMultiheadAttentionPoolingHead(
+            (attention): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=1152, out_features=1152, bias=True)
+            )
+            (layernorm): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+            (mlp): SiglipMLP(
+              (activation_fn): PytorchGELUTanh()
+              (fc1): Linear(in_features=1152, out_features=4304, bias=True)
+              (fc2): Linear(in_features=4304, out_features=1152, bias=True)
+            )
+          )
+        )
+      )
+    )
+    (mm_projector): Linear(in_features=1152, out_features=1536, bias=True)
+  )
+  (lm_head): Linear(in_features=1536, out_features=151936, bias=False)
+)
+Formatting inputs...Skip in lazy mode
+^[[A^[[A^[[A^[[A^[[A^[[A                          0%|                                                                                                                                   | 0/3235 [00:00<?, ?it/s][rank0]: Traceback (most recent call last):
+[rank0]:   File "/workspace/MERAモデル/videollama2/train.py", line 685, in <module>
+[rank0]:     train()
+[rank0]:   File "/workspace/MERAモデル/videollama2/train.py", line 668, in train
+[rank0]:     trainer.train()
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 1932, in train
+[rank0]:     return inner_training_loop(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 2268, in _inner_training_loop
+[rank0]:     tr_loss_step = self.training_step(model, inputs)
+[rank0]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 3307, in training_step
+[rank0]:     loss = self.compute_loss(model, inputs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 3338, in compute_loss
+[rank0]:     outputs = model(**inputs)
+[rank0]:               ^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/parallel/distributed.py", line 1648, in forward
+[rank0]:     else self._run_ddp_forward(*inputs, **kwargs)
+[rank0]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/parallel/distributed.py", line 1474, in _run_ddp_forward
+[rank0]:     return self.module(*inputs, **kwargs)  # type: ignore[index]
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/accelerate/utils/operations.py", line 687, in forward
+[rank0]:     return model_forward(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/accelerate/utils/operations.py", line 675, in __call__
+[rank0]:     return convert_to_fp32(self.model_forward(*args, **kwargs))
+[rank0]:                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/amp/autocast_mode.py", line 44, in decorate_autocast
+[rank0]:     return func(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/MERAモデル/videollama2/model/videollama2_qwen2.py", line 85, in forward
+[rank0]:     ) = self.prepare_inputs_labels_for_multimodal(
+[rank0]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/MERAモデル/videollama2/model/videollama2_arch.py", line 216, in prepare_inputs_labels_for_multimodal
+[rank0]:     mm_features = self.encode_images_or_videos(images)
+[rank0]:                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/MERAモデル/videollama2/model/videollama2_arch.py", line 175, in encode_images_or_videos
+[rank0]:     frames_features = self.get_model().get_vision_tower()(frames)
+[rank0]:                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+[rank0]:     return func(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/MERAモデル/videollama2/model/encoder.py", line 120, in forward
+[rank0]:     image_forward_outs = self.vision_tower(images, output_hidden_states=True)
+[rank0]:                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/models/siglip/modeling_siglip.py", line 1013, in forward
+[rank0]:     return self.vision_model(
+[rank0]:            ^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/models/siglip/modeling_siglip.py", line 914, in forward
+[rank0]:     encoder_outputs = self.encoder(
+[rank0]:                       ^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/models/siglip/modeling_siglip.py", line 719, in forward
+[rank0]:     layer_outputs = self._gradient_checkpointing_func(
+[rank0]:                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/_compile.py", line 53, in inner
+[rank0]:     return disable_fn(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/_dynamo/eval_frame.py", line 929, in _fn
+[rank0]:     return fn(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/utils/checkpoint.py", line 488, in checkpoint
+[rank0]:     return CheckpointFunction.apply(function, preserve, *args)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/autograd/function.py", line 576, in apply
+[rank0]:     return super().apply(*args, **kwargs)  # type: ignore[misc]
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/utils/checkpoint.py", line 262, in forward
+[rank0]:     outputs = run_function(*args)
+[rank0]:               ^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/models/siglip/modeling_siglip.py", line 470, in forward
+[rank0]:     hidden_states, attn_weights = self.self_attn(
+[rank0]:                                   ^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/models/siglip/modeling_siglip.py", line 406, in forward
+[rank0]:     attn_weights = nn.functional.softmax(attn_weights, dim=-1, dtype=torch.float32).to(query_states.dtype)
+[rank0]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/functional.py", line 2139, in softmax
+[rank0]:     ret = input.softmax(dim, dtype=dtype)
+[rank0]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 8.11 GiB. GPU 0 has a total capacity of 23.52 GiB of which 2.10 GiB is free. Including non-PyTorch memory, this process has 21.41 GiB memory in use. Of the allocated memory 19.16 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+  0%|                                                                                                                                   | 0/3235 [00:02<?, ?it/s]
+E0920 17:47:38.737000 21677 torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 21736) of binary: /workspace/venv/bin/python
+Traceback (most recent call last):
+  File "/workspace/venv/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/run.py", line 901, in main
+    run(args)
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/run.py", line 892, in run
+    elastic_launch(
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/launcher/api.py", line 143, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/launcher/api.py", line 277, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/workspace/MERAモデル/videollama2/train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-09-20_17:47:38
+  host      : e532743765e5
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 21736)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/workspace/MERAモデル/mera_train.py", line 347, in <module>
+    train_image(
+  File "/workspace/MERAモデル/train_runner.py", line 119, in train_image
+    _run(cmd)
+  File "/workspace/MERAモデル/train_runner.py", line 29, in _run
+    subprocess.run(cmd, cwd=REPO_DIR, check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nproc_per_node=1', '--master_port=29500', '/workspace/MERAモデル/videollama2/train.py', '--model_type', 'videollama2_qwen2', '--model_path', 'Qwen/Qwen2.5-1.5B-Instruct', '--vision_tower', 'google/siglip-so400m-patch14-384', '--mm_vision_select_layer', '-2', '--image_aspect_ratio', 'pad', '--num_frames', '16', '--data_path', '/workspace/data/intermediate/mscoco_train.json', '--data_folder', '/workspace/data', '--output_dir', '/workspace/output/mera/pretrain_image', '--bf16', 'True', '--tf32', 'True', '--fp16', 'False', '--num_train_epochs', '1', '--per_device_train_batch_size', '16', '--gradient_accumulation_steps', '8', '--learning_rate', '0.001', '--mm_projector_lr', '0.001', '--weight_decay', '0.', '--warmup_ratio', '0.03', '--lr_scheduler_type', 'cosine', '--model_max_length', '2048', '--lazy_preprocess', 'True', '--gradient_checkpointing', 'True', '--dataloader_num_workers', '4', '--save_strategy', 'epoch', '--save_only_model', 'True', '--tune_mm_mlp_adapter', 'True', '--report_to', 'tensorboard']' returned non-zero exit status 1.
+[?2004h(venv) root@e532743765e5:/workspace/MERAモデル# python mera_train.pysource /workspace/venv/bin/activate[Kcd /workspace/MERAモデルexit[Kgit add . && git commit -m "..." && git push origin main[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpython -c "import torch; print(torch.__version__, torch.cuda.is_available())"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cecho $HF_HOME[K[K[K[K[K[K[K[K[K[K[K[K[K[K[7mpython mera_train.py[27mpython mera_train.py
+[?2004l/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+
+============================================================
+Pre-Training（画像）: LLM_BACKBONE ↔ SigLIP コネクタの初期学習
+============================================================
+
+============================================================
+[torchrun] torchrun --nproc_per_node=1 --master_port=29500 /workspace/MERAモデル/videollama2/train.py --model_type videollama2_qwen2 ...
+============================================================
+
+/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/workspace/venv/lib/python3.12/site-packages/imageio_ffmpeg/_utils.py:7: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import resource_filename
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+You are using a model of type qwen2 to instantiate a model of type videollama2_qwen2. This is not supported for all configurations of models and can yield errors.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Current model: Videollama2Qwen2ForCausalLM(
+  (model): Videollama2Qwen2Model(
+    (embed_tokens): Embedding(151936, 1536)
+    (layers): ModuleList(
+      (0-27): 28 x Qwen2DecoderLayer(
+        (self_attn): Qwen2SdpaAttention(
+          (q_proj): Linear(in_features=1536, out_features=1536, bias=True)
+          (k_proj): Linear(in_features=1536, out_features=256, bias=True)
+          (v_proj): Linear(in_features=1536, out_features=256, bias=True)
+          (o_proj): Linear(in_features=1536, out_features=1536, bias=False)
+          (rotary_emb): Qwen2RotaryEmbedding()
+        )
+        (mlp): Qwen2MLP(
+          (gate_proj): Linear(in_features=1536, out_features=8960, bias=False)
+          (up_proj): Linear(in_features=1536, out_features=8960, bias=False)
+          (down_proj): Linear(in_features=8960, out_features=1536, bias=False)
+          (act_fn): SiLU()
+        )
+        (input_layernorm): Qwen2RMSNorm()
+        (post_attention_layernorm): Qwen2RMSNorm()
+      )
+    )
+    (norm): Qwen2RMSNorm()
+    (vision_tower): SiglipVisionTower(
+      (vision_tower): SiglipVisionModel(
+        (vision_model): SiglipVisionTransformer(
+          (embeddings): SiglipVisionEmbeddings(
+            (patch_embedding): Conv2d(3, 1152, kernel_size=(14, 14), stride=(14, 14), padding=valid)
+            (position_embedding): Embedding(729, 1152)
+          )
+          (encoder): SiglipEncoder(
+            (layers): ModuleList(
+              (0-26): 27 x SiglipEncoderLayer(
+                (self_attn): SiglipAttention(
+                  (k_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                  (v_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                  (q_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                  (out_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                )
+                (layer_norm1): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+                (mlp): SiglipMLP(
+                  (activation_fn): PytorchGELUTanh()
+                  (fc1): Linear(in_features=1152, out_features=4304, bias=True)
+                  (fc2): Linear(in_features=4304, out_features=1152, bias=True)
+                )
+                (layer_norm2): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+              )
+            )
+          )
+          (post_layernorm): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+          (head): SiglipMultiheadAttentionPoolingHead(
+            (attention): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=1152, out_features=1152, bias=True)
+            )
+            (layernorm): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+            (mlp): SiglipMLP(
+              (activation_fn): PytorchGELUTanh()
+              (fc1): Linear(in_features=1152, out_features=4304, bias=True)
+              (fc2): Linear(in_features=4304, out_features=1152, bias=True)
+            )
+          )
+        )
+      )
+    )
+    (mm_projector): Linear(in_features=1152, out_features=1536, bias=True)
+  )
+  (lm_head): Linear(in_features=1536, out_features=151936, bias=False)
+)
+Formatting inputs...Skip in lazy mode
+  0%|                                                                                                                                   | 0/3235 [00:00<?, ?it/s][rank0]: Traceback (most recent call last):
+[rank0]:   File "/workspace/MERAモデル/videollama2/train.py", line 685, in <module>
+[rank0]:     train()
+[rank0]:   File "/workspace/MERAモデル/videollama2/train.py", line 668, in train
+[rank0]:     trainer.train()
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 1932, in train
+[rank0]:     return inner_training_loop(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 2268, in _inner_training_loop
+[rank0]:     tr_loss_step = self.training_step(model, inputs)
+[rank0]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 3307, in training_step
+[rank0]:     loss = self.compute_loss(model, inputs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 3338, in compute_loss
+[rank0]:     outputs = model(**inputs)
+[rank0]:               ^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/parallel/distributed.py", line 1648, in forward
+[rank0]:     else self._run_ddp_forward(*inputs, **kwargs)
+[rank0]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/parallel/distributed.py", line 1474, in _run_ddp_forward
+[rank0]:     return self.module(*inputs, **kwargs)  # type: ignore[index]
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/accelerate/utils/operations.py", line 687, in forward
+[rank0]:     return model_forward(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/accelerate/utils/operations.py", line 675, in __call__
+[rank0]:     return convert_to_fp32(self.model_forward(*args, **kwargs))
+[rank0]:                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/amp/autocast_mode.py", line 44, in decorate_autocast
+[rank0]:     return func(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/MERAモデル/videollama2/model/videollama2_qwen2.py", line 93, in forward
+[rank0]:     return super().forward(
+[rank0]:            ^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 1249, in forward
+[rank0]:     loss = loss_fct(shift_logits, shift_labels)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/loss.py", line 1310, in forward
+[rank0]:     return F.cross_entropy(
+[rank0]:            ^^^^^^^^^^^^^^^^
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/nn/functional.py", line 3462, in cross_entropy
+[rank0]:     return torch._C._nn.cross_entropy_loss(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 7.01 GiB. GPU 0 has a total capacity of 23.52 GiB of which 2.34 GiB is free. Including non-PyTorch memory, this process has 21.17 GiB memory in use. Of the allocated memory 19.35 GiB is allocated by PyTorch, and 946.31 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+  0%|                                                                                                                                   | 0/3235 [00:02<?, ?it/s]
+E0920 17:52:25.688000 22962 torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 23015) of binary: /workspace/venv/bin/python
+Traceback (most recent call last):
+  File "/workspace/venv/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/run.py", line 901, in main
+    run(args)
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/run.py", line 892, in run
+    elastic_launch(
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/launcher/api.py", line 143, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/distributed/launcher/api.py", line 277, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/workspace/MERAモデル/videollama2/train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-09-20_17:52:25
+  host      : e532743765e5
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 23015)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/workspace/MERAモデル/mera_train.py", line 347, in <module>
+    train_image(
+  File "/workspace/MERAモデル/train_runner.py", line 119, in train_image
+    _run(cmd)
+  File "/workspace/MERAモデル/train_runner.py", line 29, in _run
+    subprocess.run(cmd, cwd=REPO_DIR, check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nproc_per_node=1', '--master_port=29500', '/workspace/MERAモデル/videollama2/train.py', '--model_type', 'videollama2_qwen2', '--model_path', 'Qwen/Qwen2.5-1.5B-Instruct', '--vision_tower', 'google/siglip-so400m-patch14-384', '--mm_vision_select_layer', '-2', '--image_aspect_ratio', 'pad', '--num_frames', '1', '--data_path', '/workspace/data/intermediate/mscoco_train.json', '--data_folder', '/workspace/data', '--output_dir', '/workspace/output/mera/pretrain_image', '--bf16', 'True', '--tf32', 'True', '--fp16', 'False', '--num_train_epochs', '1', '--per_device_train_batch_size', '16', '--gradient_accumulation_steps', '8', '--learning_rate', '0.001', '--mm_projector_lr', '0.001', '--weight_decay', '0.', '--warmup_ratio', '0.03', '--lr_scheduler_type', 'cosine', '--model_max_length', '2048', '--lazy_preprocess', 'True', '--gradient_checkpointing', 'True', '--dataloader_num_workers', '4', '--save_strategy', 'epoch', '--save_only_model', 'True', '--tune_mm_mlp_adapter', 'True', '--report_to', 'tensorboard']' returned non-zero exit status 1.
+[?2004h(venv) root@e532743765e5:/workspace/MERAモデル# [7mpython mera_train.py[27m
+M[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cpython mera_train.py
+M
+[?2004l/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+
+============================================================
+Pre-Training（画像）: LLM_BACKBONE ↔ SigLIP コネクタの初期学習
+============================================================
+
+============================================================
+[torchrun] torchrun --nproc_per_node=1 --master_port=29500 /workspace/MERAモデル/videollama2/train.py --model_type videollama2_qwen2 ...
+============================================================
+
+/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/workspace/venv/lib/python3.12/site-packages/imageio_ffmpeg/_utils.py:7: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import resource_filename
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+You are using a model of type qwen2 to instantiate a model of type videollama2_qwen2. This is not supported for all configurations of models and can yield errors.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Current model: Videollama2Qwen2ForCausalLM(
+  (model): Videollama2Qwen2Model(
+    (embed_tokens): Embedding(151936, 1536)
+    (layers): ModuleList(
+      (0-27): 28 x Qwen2DecoderLayer(
+        (self_attn): Qwen2SdpaAttention(
+          (q_proj): Linear(in_features=1536, out_features=1536, bias=True)
+          (k_proj): Linear(in_features=1536, out_features=256, bias=True)
+          (v_proj): Linear(in_features=1536, out_features=256, bias=True)
+          (o_proj): Linear(in_features=1536, out_features=1536, bias=False)
+          (rotary_emb): Qwen2RotaryEmbedding()
+        )
+        (mlp): Qwen2MLP(
+          (gate_proj): Linear(in_features=1536, out_features=8960, bias=False)
+          (up_proj): Linear(in_features=1536, out_features=8960, bias=False)
+          (down_proj): Linear(in_features=8960, out_features=1536, bias=False)
+          (act_fn): SiLU()
+        )
+        (input_layernorm): Qwen2RMSNorm()
+        (post_attention_layernorm): Qwen2RMSNorm()
+      )
+    )
+    (norm): Qwen2RMSNorm()
+    (vision_tower): SiglipVisionTower(
+      (vision_tower): SiglipVisionModel(
+        (vision_model): SiglipVisionTransformer(
+          (embeddings): SiglipVisionEmbeddings(
+            (patch_embedding): Conv2d(3, 1152, kernel_size=(14, 14), stride=(14, 14), padding=valid)
+            (position_embedding): Embedding(729, 1152)
+          )
+          (encoder): SiglipEncoder(
+            (layers): ModuleList(
+              (0-26): 27 x SiglipEncoderLayer(
+                (self_attn): SiglipAttention(
+                  (k_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                  (v_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                  (q_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                  (out_proj): Linear(in_features=1152, out_features=1152, bias=True)
+                )
+                (layer_norm1): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+                (mlp): SiglipMLP(
+                  (activation_fn): PytorchGELUTanh()
+                  (fc1): Linear(in_features=1152, out_features=4304, bias=True)
+                  (fc2): Linear(in_features=4304, out_features=1152, bias=True)
+                )
+                (layer_norm2): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+              )
+            )
+          )
+          (post_layernorm): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+          (head): SiglipMultiheadAttentionPoolingHead(
+            (attention): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=1152, out_features=1152, bias=True)
+            )
+            (layernorm): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+            (mlp): SiglipMLP(
+              (activation_fn): PytorchGELUTanh()
+              (fc1): Linear(in_features=1152, out_features=4304, bias=True)
+              (fc2): Linear(in_features=4304, out_features=1152, bias=True)
+            )
+          )
+        )
+      )
+    )
+    (mm_projector): Linear(in_features=1152, out_features=1536, bias=True)
+  )
+  (lm_head): Linear(in_features=1536, out_features=151936, bias=False)
+)
+Formatting inputs...Skip in lazy mode
+  0%|                                                                                                                                   | 0/3235 [00:00<?, ?it/s]  0%|                                                                                                                        | 1/3235 [00:14<12:39:29, 14.09s/it]  0%|                                                                                                                        | 2/3235 [00:26<11:39:40, 12.99s/it]  0%|                                                                                                                        | 3/3235 [00:38<11:21:11, 12.65s/it]  0%|▏                                                                                                                       | 4/3235 [00:51<11:17:01, 12.57s/it]  0%|▏                                                                                                                       | 5/3235 [01:03<11:10:55, 12.46s/it]  0%|▏                                                                                                                       | 6/3235 [01:15<11:07:15, 12.40s/it]  0%|▎                                                                                                                       | 7/3235 [01:27<11:05:03, 12.36s/it]  0%|▎                                                                                                                       | 8/3235 [01:40<11:03:28, 12.34s/it]  0%|▎                                                                                                                       | 9/3235 [01:52<11:02:27, 12.32s/it]  0%|▎                                                                                                                      | 10/3235 [02:04<11:01:57, 12.32s/it]  0%|▍                                                                                                                      | 11/3235 [02:17<11:04:41, 12.37s/it]  0%|▍                                                                                                                      | 12/3235 [02:29<11:03:29, 12.35s/it]  0%|▍                                                                                                                      | 13/3235 [02:41<11:02:24, 12.34s/it]  0%|▌                                                                                                                      | 14/3235 [02:54<11:01:38, 12.32s/it]  0%|▌                                                                                                                      | 15/3235 [03:06<11:01:18, 12.32s/it]  0%|▌                                                                                                                      | 16/3235 [03:18<11:01:13, 12.32s/it]  1%|▋                                                                                                                      | 17/3235 [03:31<11:00:36, 12.32s/it]  1%|▋                                                                                                                      | 18/3235 [03:43<11:03:27, 12.37s/it]  1%|▋                                                                                                                      | 19/3235 [03:55<11:02:37, 12.36s/it]  1%|▋                                                                                                                      | 20/3235 [04:08<11:01:41, 12.35s/it]  1%|▊                                                                                                                      | 21/3235 [04:20<11:04:16, 12.40s/it]  1%|▊                                                                                                                      | 22/3235 [04:33<11:02:34, 12.37s/it]  1%|▊                                                                                                                      | 23/3235 [04:45<11:01:24, 12.35s/it]  1%|▉                                                                                                                      | 24/3235 [04:57<11:00:55, 12.35s/it]  1%|▉                                                                                                                      | 25/3235 [05:10<11:00:18, 12.34s/it]  1%|▉                                                                                                                      | 26/3235 [05:22<10:59:43, 12.34s/it]  1%|▉                                                                                                                      | 27/3235 [05:34<10:59:39, 12.34s/it]  1%|█                                                                                                                      | 28/3235 [05:47<10:59:12, 12.33s/it]  1%|█                                                                                                                      | 29/3235 [05:59<10:58:35, 12.33s/it]  1%|█                                                                                                                      | 30/3235 [06:11<10:58:08, 12.32s/it]  1%|█▏                                                                                                                     | 31/3235 [06:23<10:58:14, 12.33s/it]  1%|█▏                                                                                                                     | 32/3235 [06:36<10:57:58, 12.33s/it]  1%|█▏                                                                                                                     | 33/3235 [06:48<10:58:04, 12.33s/it]  1%|█▎                                                                                                                     | 34/3235 [07:00<10:57:57, 12.33s/it]  1%|█▎                                                                                                                     | 35/3235 [07:13<10:57:41, 12.33s/it]  1%|█▎                                                                                                                     | 36/3235 [07:25<10:57:20, 12.33s/it]  1%|█▎                                                                                                                     | 37/3235 [07:37<10:56:41, 12.32s/it]  1%|█▍                                                                                                                     | 38/3235 [07:50<10:56:18, 12.32s/it]  1%|█▍                                                                                                                     | 39/3235 [08:02<10:55:54, 12.31s/it]  1%|█▍                                                                                                                     | 40/3235 [08:14<10:56:03, 12.32s/it]  1%|█▌                                                                                                                     | 41/3235 [08:27<10:55:38, 12.32s/it]  1%|█▌                                                                                                                     | 42/3235 [08:39<10:55:17, 12.31s/it]  1%|█▌                                                                                                                     | 43/3235 [08:52<10:58:42, 12.38s/it]  1%|█▌                                                                                                                     | 44/3235 [09:04<10:57:26, 12.36s/it]  1%|█▋                                                                                                                     | 45/3235 [09:16<10:56:24, 12.35s/it]  1%|█▋                                                                                                                     | 46/3235 [09:28<10:55:46, 12.34s/it]  1%|█▋                                                                                                                     | 47/3235 [09:41<10:55:31, 12.34s/it]  1%|█▊                                                                                                                     | 48/3235 [09:53<10:54:51, 12.33s/it]  2%|█▊                                                                                                                     | 49/3235 [10:05<10:54:36, 12.33s/it]  2%|█▊                                                                                                                     | 50/3235 [10:18<10:54:08, 12.32s/it]  2%|█▉                                                                                                                     | 51/3235 [10:30<10:53:44, 12.32s/it]  2%|█▉                                                                                                                     | 52/3235 [10:42<10:53:31, 12.32s/it]  2%|█▉                                                                                                                     | 53/3235 [10:55<10:53:03, 12.31s/it]  2%|█▉                                                                                                                     | 54/3235 [11:07<10:52:37, 12.31s/it]  2%|██                                                                                                                     | 55/3235 [11:19<10:52:41, 12.31s/it]  2%|██                                                                                                                     | 56/3235 [11:32<10:52:22, 12.31s/it]  2%|██                                                                                                                     | 57/3235 [11:44<10:52:17, 12.32s/it]  2%|██▏                                                                                                                    | 58/3235 [11:56<10:52:25, 12.32s/it]  2%|██▏                                                                                                                    | 59/3235 [12:09<10:52:21, 12.32s/it]  2%|██▏                                                                                                                    | 60/3235 [12:21<10:52:10, 12.32s/it]  2%|██▏                                                                                                                    | 61/3235 [12:33<10:51:52, 12.32s/it]  2%|██▎                                                                                                                    | 62/3235 [12:46<10:52:05, 12.33s/it]  2%|██▎                                                                                                                    | 63/3235 [12:58<10:52:00, 12.33s/it]  2%|██▎                                                                                                                    | 64/3235 [13:10<10:51:35, 12.33s/it]  2%|██▍                                                                                                                    | 65/3235 [13:23<10:51:19, 12.33s/it]  2%|██▍                                                                                                                    | 66/3235 [13:35<10:51:01, 12.33s/it]  2%|██▍                                                                                                                    | 67/3235 [13:47<10:50:46, 12.33s/it]  2%|██▌                                                                                                                    | 68/3235 [14:00<10:50:37, 12.33s/it]  2%|██▌                                                                                                                    | 69/3235 [14:12<10:50:55, 12.34s/it]  2%|██▌                                                                                                                    | 70/3235 [14:24<10:51:00, 12.34s/it]  2%|██▌                                                                                                                    | 71/3235 [14:37<10:50:57, 12.34s/it]  2%|██▋                                                                                                                    | 72/3235 [14:49<10:50:54, 12.35s/it]  2%|██▋                                                                                                                    | 73/3235 [15:01<10:50:30, 12.34s/it]  2%|██▋                                                                                                                    | 74/3235 [15:14<10:50:17, 12.34s/it]  2%|██▊                                                                                                                    | 75/3235 [15:26<10:50:02, 12.34s/it]  2%|██▊                                                                                                                    | 76/3235 [15:38<10:49:22, 12.33s/it]  2%|██▊                                                                                                                    | 77/3235 [15:51<10:48:58, 12.33s/it]  2%|██▊                                                                                                                    | 78/3235 [16:03<10:48:26, 12.32s/it]  2%|██▉                                                                                                                    | 79/3235 [16:15<10:48:07, 12.32s/it]  2%|██▉                                                                                                                    | 80/3235 [16:28<10:48:07, 12.33s/it]  3%|██▉                                                                                                                    | 81/3235 [16:40<10:47:46, 12.32s/it]  3%|███                                                                                                                    | 82/3235 [16:52<10:47:37, 12.32s/it]  3%|███                                                                                                                    | 83/3235 [17:05<10:47:19, 12.32s/it]  3%|███                                                                                                                    | 84/3235 [17:17<10:47:03, 12.32s/it]  3%|███▏                                                                                                                   | 85/3235 [17:29<10:46:53, 12.32s/it]  3%|███▏                                                                                                                   | 86/3235 [17:42<10:46:59, 12.33s/it]  3%|███▏                                                                                                                   | 87/3235 [17:54<10:47:37, 12.34s/it]  3%|███▏                                                                                                                   | 88/3235 [18:06<10:47:09, 12.34s/it]  3%|███▎                                                                                                                   | 89/3235 [18:19<10:46:37, 12.33s/it]  3%|███▎                                                                                                                   | 90/3235 [18:31<10:46:12, 12.33s/it]  3%|███▎                                                                                                                   | 91/3235 [18:43<10:45:41, 12.32s/it]  3%|███▍                                                                                                                   | 92/3235 [18:55<10:45:14, 12.32s/it]  3%|███▍                                                                                                                   | 93/3235 [19:08<10:45:07, 12.32s/it]  3%|███▍                                                                                                                   | 94/3235 [19:20<10:45:09, 12.32s/it]  3%|███▍                                                                                                                   | 95/3235 [19:32<10:45:15, 12.33s/it]  3%|███▌                                                                                                                   | 96/3235 [19:45<10:44:58, 12.33s/it]  3%|███▌                                                                                                                   | 97/3235 [19:57<10:45:02, 12.33s/it]  3%|███▌                                                                                                                   | 98/3235 [20:09<10:44:45, 12.33s/it]  3%|███▋                                                                                                                   | 99/3235 [20:22<10:44:07, 12.32s/it]  3%|███▋                                                                                                                  | 100/3235 [20:34<10:43:51, 12.32s/it]  3%|███▋                                                                                                                  | 101/3235 [20:46<10:43:43, 12.32s/it]  3%|███▋                                                                                                                  | 102/3235 [20:59<10:43:30, 12.32s/it]  3%|███▊                                                                                                                  | 103/3235 [21:11<10:43:24, 12.33s/it]  3%|███▊                                                                                                                  | 104/3235 [21:23<10:43:10, 12.33s/it]  3%|███▊                                                                                                                  | 105/3235 [21:36<10:42:59, 12.33s/it]  3%|███▊                                                                                                                  | 106/3235 [21:48<10:42:39, 12.32s/it]  3%|███▉                                                                                                                  | 107/3235 [22:00<10:42:07, 12.32s/it]^CW0920 18:17:17.930000 23786 torch/distributed/elastic/agent/server/api.py:723] Received 2 death signal, shutting down workers
+W0920 18:17:17.930000 23786 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 23845 closing signal SIGINT
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/workspace/MERAモデル/videollama2/train.py", line 685, in <module>
+[rank0]:     train()
+[rank0]:   File "/workspace/MERAモデル/videollama2/train.py", line 668, in train
+[rank0]:     trainer.train()
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 1932, in train
+[rank0]:     return inner_training_loop(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 2268, in _inner_training_loop
+[rank0]:     tr_loss_step = self.training_step(model, inputs)
+[rank0]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/transformers/trainer.py", line 3324, in training_step
+[rank0]:     self.accelerator.backward(loss, **kwargs)
+[rank0]:   File "/workspace/venv/lib/python3.12/site-packages/accelerate/accelerator.py", line 1964, in backward
+[rank0]:     loss.backward(**kwargs)
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/_tensor.py", line 647, in backward
+[rank0]:     torch.autograd.backward(
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/autograd/__init__.py", line 354, in backward
+[rank0]:     _engine_run_backward(
+[rank0]:   File "/usr/local/lib/python3.12/dist-packages/torch/autograd/graph.py", line 829, in _engine_run_backward
+[rank0]:     return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]: KeyboardInterrupt
+Traceback (most recent call last):
+  File "/workspace/MERAモデル/mera_train.py", line 347, in <module>
+    train_image(
+  File "/workspace/MERAモデル/train_runner.py", line 119, in train_image
+    _run(cmd)
+  File "/workspace/MERAモデル/train_runner.py", line 29, in _run
+    subprocess.run(cmd, cwd=REPO_DIR, check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 550, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 1201, in communicate
+    self.wait()
+  File "/usr/lib/python3.12/subprocess.py", line 1264, in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 2053, in _wait
+    (pid, sts) = self._try_wait(0)
+                 ^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 2011, in _try_wait
+    (pid, sts) = os.waitpid(self.pid, wait_flags)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+[?2004h(venv) root@e532743765e5:/workspace/MERAモデル#   3%|███▉                                                                                                                  | 107/3235 [22:07<10:46:59, 12.41s/it]
+[rank0]:[W920 18:17:19.781746034 TCPStore.cpp:125] [c10d] recvValue failed on SocketImpl(fd=27, addr=[localhost]:59092, remote=[localhost]:29500): Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+Exception raised from recvBytes at /pytorch/torch/csrc/distributed/c10d/Utils.hpp:682 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x7cc3b5cd9eb0 in /usr/local/lib/python3.12/dist-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x5d694d1 (0x7cc399def4d1 in /usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cpu.so)
+frame #2: <unknown function> + 0x5d6a8cd (0x7cc399df08cd in /usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cpu.so)
+frame #3: <unknown function> + 0x5d6b47a (0x7cc399df147a in /usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cpu.so)
+frame #4: c10d::TCPStore::check(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) + 0x31e (0x7cc399dec19e in /usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cpu.so)
+frame #5: c10d::ProcessGroupNCCL::HeartbeatMonitor::runLoop() + 0x398 (0x7cc3592d1b18 in /usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cuda.so)
+frame #6: <unknown function> + 0xecdb4 (0x7cc33cc01db4 in /lib/x86_64-linux-gnu/libstdc++.so.6)
+frame #7: <unknown function> + 0x9caa4 (0x7cc3b695baa4 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #8: __clone + 0x44 (0x7cc3b69e8a64 in /lib/x86_64-linux-gnu/libc.so.6)
+
+[rank0]:[W920 18:17:19.783988971 ProcessGroupNCCL.cpp:1783] [PG ID 0 PG GUID 0(default_pg) Rank 0] Failed to check the "should dump" flag on TCPStore, (maybe TCPStore server has shut down too early), with error: Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+[rank0]:[W920 18:17:20.784151214 TCPStore.cpp:106] [c10d] sendBytes failed on SocketImpl(fd=27, addr=[localhost]:59092, remote=[localhost]:29500): Broken pipe
+Exception raised from sendBytes at /pytorch/torch/csrc/distributed/c10d/Utils.hpp:653 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x80 (0x7cc3b5cd9eb0 in /usr/local/lib/python3.12/dist-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x5d694d1 (0x7cc399def4d1 in /usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cpu.so)
+frame #2: <unknown function> + 0x5d69d62 (0x7cc399defd62 in /usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cpu.so)
+frame #3: <unknown function> + 0x5d6b86e (0x7cc399df186e in /usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cpu.so)
+frame #4: c10d::TCPStore::check(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) + 0x30e (0x7cc399dec18e in /usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cpu.so)
+frame #5: c10d::ProcessGroupNCCL::HeartbeatMonitor::runLoop() + 0x398 (0x7cc3592d1b18 in /usr/local/lib/python3.12/dist-packages/torch/lib/libtorch_cuda.so)
+frame #6: <unknown function> + 0xecdb4 (0x7cc33cc01db4 in /lib/x86_64-linux-gnu/libstdc++.so.6)
+frame #7: <unknown function> + 0x9caa4 (0x7cc3b695baa4 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #8: __clone + 0x44 (0x7cc3b69e8a64 in /lib/x86_64-linux-gnu/libc.so.6)
+
+[rank0]:[W920 18:17:20.786580001 ProcessGroupNCCL.cpp:1783] [PG ID 0 PG GUID 0(default_pg) Rank 0] Failed to check the "should dump" flag on TCPStore, (maybe TCPStore server has shut down too early), with error: Broken pipe
+^C[?2004l[?2004h[?2004l
+[?2004h(venv) root@e532743765e5:/workspace/MERAモデル# [7mnvidia-smi[27mnvidia-smi
+[?2004lSun Sep 20 18:17:32 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 4090        On  |   00000000:03:00.0 Off |                  Off |
+| 46%   51C    P8             25W /  450W |       1MiB /  24564MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+[?2004h(venv) root@e532743765e5:/workspace/MERAモデル# [7mrm -rf /workspace/output/mera/pretrain_image[27mrm -rf /workspace/output/mera/pretrain_image
+[?2004l[?2004h(venv) root@e532743765e5:/workspace/MERAモデル# rm -rf /workspace/output/mera/pretrain_image[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kexit
+[?2004lexit
+
+Script done on 2026-09-20 18:18:06+00:00 [COMMAND_EXIT_CODE="0"]
