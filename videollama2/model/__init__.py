@@ -26,10 +26,7 @@ from .videollama2_llama import Videollama2LlamaForCausalLM, Videollama2LlamaConf
 from .videollama2_mistral import Videollama2MistralForCausalLM, Videollama2MistralConfig
 from .videollama2_mixtral import Videollama2MixtralForCausalLM, Videollama2MixtralConfig
 from .videollama2_qwen2 import Videollama2Qwen2ForCausalLM, Videollama2Qwen2Config
-try:
-    from .videollama2_gemma2 import Videollama2Gemma2ForCausalLM, Videollama2Gemma2Config
-except ImportError:  # transformers<4.42 には Gemma2Config が無い。本研究では未使用
-    Videollama2Gemma2ForCausalLM = Videollama2Gemma2Config = None
+from .videollama2_gemma2 import Videollama2Gemma2ForCausalLM, Videollama2Gemma2Config
 from .videollama2_phi3 import Videollama2Phi3ForCausalLM, Videollama2Phi3Config
 
 
