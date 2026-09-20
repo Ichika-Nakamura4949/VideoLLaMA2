@@ -454,10 +454,23 @@ class VideoLLaMA2Trainer(Trainer):
             path = os.path.join(resume_from_checkpoint, 'mm_projector.bin')
             weights = torch.load(path, map_location='cpu')
             weights = {k.split('mm_projector.')[1]: v for k, v in weights.items() if 'mm_projector.' in k}
-            model.get_model().mm_projector.load_state_dict(weights)
+            # named_parameters 由来なので buffer を含まない。projector が BatchNorm 等を持つ型でも
+            # 読めるよう strict=False（buffer は凍結・不変）。余分なキーだけは異常として弾く
+            missing, unexpected = model.get_model().mm_projector.load_state_dict(weights, strict=False)
+            assert not unexpected, f"mm_projector.bin に想定外のキー: {unexpected}"
             logger.info(f"Loaded mm_projector from {path} (adapter-only resume).")
         else:
             super(VideoLLaMA2Trainer, self)._load_from_checkpoint(resume_from_checkpoint, model)
+
+    def _load_rng_state(self, checkpoint):
+        # torch>=2.6 は torch.load の既定が weights_only=True で、transformers 4.42.3 の
+        # _load_rng_state は rng_state.pth 内の numpy 乱数状態(ndarray)を読めずに落ちる
+        # （transformers 側の修正は 4.46 前後）。自分で書いたファイルなので numpy を許可して委譲する
+        import numpy as np
+        np_core = getattr(np, "_core", None) or np.core
+        allow = [np_core.multiarray._reconstruct, np.ndarray, np.dtype, type(np.dtype(np.uint32))]
+        with torch.serialization.safe_globals(allow):
+            super(VideoLLaMA2Trainer, self)._load_rng_state(checkpoint)
 
     def _save(self, output_dir: Optional[str] = None, state_dict=None):
         if getattr(self.args, 'tune_mm_mlp_adapter', False):

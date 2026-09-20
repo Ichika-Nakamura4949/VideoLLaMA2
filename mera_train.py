@@ -114,6 +114,22 @@ def _cleanup_checkpoints(path: str, marker: str) -> None:
         print(f"[cleanup] 途中保存を削除: {ckpt}")
 
 
+def _prune_incomplete_checkpoints(path: str) -> None:
+    """
+    書きかけの途中保存 path/checkpoint-* を削除する。学習呼び出しの直前に呼ぶ。
+
+    transformers 4.42.3 は一時フォルダを使わず checkpoint-N に直接書くため、保存中に落ちると
+    不完全なフォルダが残り、videollama2/train.py の再開処理がステップ番号最大のそれを拾って
+    失敗する（trainer_state.json 欠落なら FileNotFoundError、optimizer.pt 欠落なら黙って
+    warmup からやり直し）。trainer_state.json はどの保存経路でも最後に書かれるので、
+    これが無いものを不完全とみなして落とし、直前の正常な checkpoint から再開させる。
+    """
+    for ckpt in glob.glob(os.path.join(path, "checkpoint-*")):
+        if os.path.isdir(ckpt) and not os.path.exists(os.path.join(ckpt, "trainer_state.json")):
+            shutil.rmtree(ckpt, ignore_errors=True)
+            print(f"[cleanup] 不完全な途中保存を削除: {ckpt}")
+
+
 # ── LoRA マージ補助関数 ────────────────────────────────────────────────────────
 
 def _merge_lora_and_save(base_path: str, lora_path: str, save_path: str) -> None:
@@ -365,6 +381,7 @@ if __name__ == "__main__":
     print("Pre-Training（画像）: LLM_BACKBONE ↔ SigLIP コネクタの初期学習")
     print("="*60)
     if not _already_done(config.CKPT_IMG_PRETRAIN, "Pre-Training（画像コネクタ学習）", "mm_projector.bin"):
+        _prune_incomplete_checkpoints(config.CKPT_IMG_PRETRAIN)
         train_image(
             model_path          = config.LLM_BACKBONE,
             data_json           = config.IMAGE_PRETRAIN_JSON,
@@ -396,6 +413,7 @@ if __name__ == "__main__":
     print("="*60)
     if not _already_done(config.CKPT_PHASE1, "Phase1（マージ済みモデル）", "config.json"):
         if not _already_done(config.CKPT_PHASE1_LORA, "Phase1（LoRA 学習）", "adapter_config.json"):
+            _prune_incomplete_checkpoints(config.CKPT_PHASE1_LORA)
             train_image(
                 model_path      = config.CKPT_IMG_PRETRAIN,
                 data_json       = config.IMAGE_DATA_JSON,
@@ -426,6 +444,7 @@ if __name__ == "__main__":
     print("Pre-Training（音声）: θ_1 ↔ BEATs コネクタの初期学習")
     print("="*60)
     if not _already_done(config.CKPT_AUD_PRETRAIN, "Pre-Training（音声コネクタ学習）", "mm_projector_a.bin"):
+        _prune_incomplete_checkpoints(config.CKPT_AUD_PRETRAIN)
         train_audio(
             model_path            = config.CKPT_PHASE1,
             data_json             = config.AUDIO_PRETRAIN_JSON,
@@ -457,6 +476,7 @@ if __name__ == "__main__":
     print("="*60)
     if not _already_done(config.CKPT_AUDIO_VANILLA, "Phase2（マージ済みモデル）", "config.json"):
         if not _already_done(config.CKPT_AUDIO_VANILLA_LORA, "Phase2（LoRA 学習）", "adapter_config.json"):
+            _prune_incomplete_checkpoints(config.CKPT_AUDIO_VANILLA_LORA)
             train_audio(
                 model_path      = config.CKPT_AUD_PRETRAIN,
                 data_json       = config.AUDIO_DATA_JSON,
@@ -501,6 +521,7 @@ if __name__ == "__main__":
     print("="*60)
     if not _already_done(config.CKPT_IMG_REALIGNED, "Step2a（画像コネクタ ReAlign）", "mm_projector.bin"):
         step2 = get_step2_training_flags()
+        _prune_incomplete_checkpoints(config.CKPT_IMG_REALIGNED)
         train_image(
             model_path          = config.CKPT_MERGED,
             data_json           = config.IMAGE_REPLAY_JSON,
@@ -524,6 +545,7 @@ if __name__ == "__main__":
     print("="*60)
     if not _already_done(config.CKPT_AUD_REALIGNED, "Step2b（音声コネクタ ReAlign）", "mm_projector_a.bin"):
         step2 = get_step2_training_flags()
+        _prune_incomplete_checkpoints(config.CKPT_AUD_REALIGNED)
         train_audio(
             model_path            = config.CKPT_MERGED,
             data_json             = config.AUDIO_REPLAY_JSON,
