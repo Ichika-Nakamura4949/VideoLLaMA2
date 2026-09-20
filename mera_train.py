@@ -54,12 +54,16 @@ Qwen2.5-1.5B（config.LLM_BACKBONE）に差し替えたため、Phase1の前に
   - 学習完了後: python calc_brg_frg.py
 
 再開ロジック:
-  各ステップの出力ディレクトリが既に存在する場合はそのステップをスキップする。
+  各ステップの出力ディレクトリに完了マーカーが存在する場合はそのステップをスキップする。
   Phase1 LoRA 学習済み（CKPT_PHASE1_LORA）・未マージの場合はマージのみ再実行する。
+  学習中の段階は save_steps ごとに output_dir/checkpoint-N へ途中保存され、中断後に
+  再実行すると videollama2/train.py が最新の checkpoint-N から自動再開する。
+  段階完了後の checkpoint-N は _cleanup_checkpoints で削除する。
 """
 
 import glob
 import os
+import shutil
 import sys
 import torch
 import transformers
@@ -91,6 +95,23 @@ def _already_done(path: str, name: str, marker: str = "config.json") -> bool:
         print(f"[skip] {name} → 完了マーカー検出のためスキップ: {marker_path}")
         return True
     return False
+
+
+def _cleanup_checkpoints(path: str, marker: str) -> None:
+    """
+    段階が完了している（path/marker が存在する）場合に限り、途中保存 path/checkpoint-* を削除する。
+
+    途中保存は train_runner の save_strategy=steps で書かれ、中断→再実行時の再開に使う。
+    完了後は不要なうえ、残しておくと (1) 音声 Pre-Training ではフルモデル約4GB、Phase1/2 では
+    DeepSpeed 状態約2GB がディスクを占有し、(2) 完了マーカーを手で消して再実行したときに
+    videollama2/train.py が checkpoint-* を見て「途中から再開」してしまう。
+    未完了（marker 無し）のときは再開に必要なので触らない。
+    """
+    if not os.path.exists(os.path.join(path, marker)):
+        return
+    for ckpt in sorted(glob.glob(os.path.join(path, "checkpoint-*"))):
+        shutil.rmtree(ckpt, ignore_errors=True)
+        print(f"[cleanup] 途中保存を削除: {ckpt}")
 
 
 # ── LoRA マージ補助関数 ────────────────────────────────────────────────────────
@@ -357,7 +378,9 @@ if __name__ == "__main__":
             batch_size          = 8,
             grad_accum          = 16,         # 8 × 16 = 128（論文 Table 9: Pre-Training バッチ128。RTX 4090 24GBではbatch 16でもlogits(語彙15万)でOOM）
             num_gpus            = config.NUM_GPUS,
+            save_steps          = 500,        # 実測12.3秒/step → 約1.7時間ごとに途中保存
         )
+    _cleanup_checkpoints(config.CKPT_IMG_PRETRAIN, "mm_projector.bin")
     # 学習をスキップした場合も含め毎回冪等にチェックする（_already_doneの外側）
     _ensure_pretrain_full_checkpoint(
         base_model_path = config.LLM_BACKBONE,
@@ -384,7 +407,9 @@ if __name__ == "__main__":
                 lora_alpha      = 128,
                 deepspeed_config= DEEPSPEED_CONFIG,
                 num_gpus        = config.NUM_GPUS,
+                save_steps      = 3000,       # 全約26,000step。DeepSpeed状態(約2GB)の書き出し頻度を抑えつつ約1.5時間ごと
             )
+        _cleanup_checkpoints(config.CKPT_PHASE1_LORA, "adapter_config.json")
         _merge_lora_and_save(
             base_path = config.CKPT_IMG_PRETRAIN,
             lora_path = config.CKPT_PHASE1_LORA,
@@ -415,6 +440,7 @@ if __name__ == "__main__":
             grad_accum            = 16,       # 8 × 16 = 128（論文 Table 9: Pre-Training バッチ128。RTX 4090 24GBではbatch 16でもlogits(語彙15万)でOOM）
             num_gpus              = config.NUM_GPUS,
         )
+    _cleanup_checkpoints(config.CKPT_AUD_PRETRAIN, "mm_projector_a.bin")
     # 学習をスキップした場合も含め毎回冪等にチェックする（_already_doneの外側）
     _ensure_pretrain_full_checkpoint(
         base_model_path = config.CKPT_PHASE1,
@@ -444,6 +470,7 @@ if __name__ == "__main__":
                 deepspeed_config= DEEPSPEED_CONFIG,
                 num_gpus        = config.NUM_GPUS,
             )
+        _cleanup_checkpoints(config.CKPT_AUDIO_VANILLA_LORA, "adapter_config.json")
         _merge_lora_and_save(
             base_path = config.CKPT_AUD_PRETRAIN,
             lora_path = config.CKPT_AUDIO_VANILLA_LORA,
@@ -486,6 +513,7 @@ if __name__ == "__main__":
             grad_accum          = step2["grad_accum"],
             num_gpus            = config.NUM_GPUS,
         )
+    _cleanup_checkpoints(config.CKPT_IMG_REALIGNED, "mm_projector.bin")
 
     # ─────────────────────────────────────────────────────────────────────────
     # Step 2b: 音声コネクタを音声 replay データで再整合
@@ -510,6 +538,7 @@ if __name__ == "__main__":
         )
     # 学習をスキップした場合（クリーンアップ前にクラッシュして再開した場合）も
     # 含め毎回冪等に呼ぶ（外部レビューで指摘・修正）
+    _cleanup_checkpoints(config.CKPT_AUD_REALIGNED, "mm_projector_a.bin")
     _cleanup_step2b_output()
 
     # ─────────────────────────────────────────────────────────────────────────

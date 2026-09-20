@@ -418,6 +418,9 @@ class VideoLLaMA2Trainer(Trainer):
             self._save_rng_state(output_dir)
             self.state.save_to_json(os.path.join(output_dir, TRAINER_STATE_NAME))
             self.args.distributed_state.wait_for_everyone()
+            # 上流はここで旧 checkpoint を消さないため save_total_limit が効かない。HF 本体と同じ処理を呼ぶ
+            if self.args.should_save:
+                self._rotate_checkpoints(use_mtime=False, output_dir=run_dir)
         else:
             # NOTE: Supporting save complete lora checkpoint during training.
             if self.args.lora_enable:
@@ -440,6 +443,21 @@ class VideoLLaMA2Trainer(Trainer):
                 super(VideoLLaMA2Trainer, self)._save_checkpoint(model, trial, metrics)
             else:
                 super(VideoLLaMA2Trainer, self)._save_checkpoint(model, trial, metrics)
+
+    def _load_from_checkpoint(self, resume_from_checkpoint, model=None):
+        if getattr(self.args, 'tune_mm_mlp_adapter', False):
+            # _save_checkpoint（tune_mm_mlp_adapter 分岐）は checkpoint-N に mm_projector.bin しか
+            # 置かないため、HF 本体の _load_from_checkpoint は「モデル重みが無い」と拒否する。
+            # コネクタ以外は凍結で変化しないので、コネクタだけ読み戻せば再開として十分。
+            # optimizer / scheduler / RNG / trainer_state は HF 本体が別経路で読み込む。
+            model = self.model if model is None else model
+            path = os.path.join(resume_from_checkpoint, 'mm_projector.bin')
+            weights = torch.load(path, map_location='cpu')
+            weights = {k.split('mm_projector.')[1]: v for k, v in weights.items() if 'mm_projector.' in k}
+            model.get_model().mm_projector.load_state_dict(weights)
+            logger.info(f"Loaded mm_projector from {path} (adapter-only resume).")
+        else:
+            super(VideoLLaMA2Trainer, self)._load_from_checkpoint(resume_from_checkpoint, model)
 
     def _save(self, output_dir: Optional[str] = None, state_dict=None):
         if getattr(self.args, 'tune_mm_mlp_adapter', False):

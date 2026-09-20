@@ -11,6 +11,12 @@ tune_mm_mlp_adapter / tune_mm_mlp_adapter_a フラグの使い分け:
 lora_enable フラグの使い分け:
   Phase1/Phase2（LLM を学習）: True → LoRA で LLM の trainable param を削減
   Step2a/Step2b（コネクタのみ再整合）: False（デフォルト）→ LLM 凍結なので LoRA 不要
+
+途中保存と再開:
+  save_strategy=steps で output_dir/checkpoint-N に save_steps ごとに保存する。
+  videollama2/train.py は output_dir に checkpoint-* があれば resume_from_checkpoint=True で
+  再開するため、中断後は同じ引数で呼び直すだけでよい。段階完了後の checkpoint-* の掃除は
+  mera_train.py 側（_cleanup_checkpoints）で行う。
 """
 
 import os
@@ -47,6 +53,7 @@ def train_image(
     grad_accum: int = 4,
     num_epochs: int = 1,
     num_gpus: int = 1,
+    save_steps: int = 500,
 ) -> None:
     """
     画像モダリティの学習を実行する（Phase1・Step2a で共用）。
@@ -68,6 +75,8 @@ def train_image(
         grad_accum          : 勾配累積ステップ数
         num_epochs          : エポック数
         num_gpus            : GPU 数
+        save_steps          : 途中保存の間隔（最適化ステップ数）。output_dir/checkpoint-N に
+                              保存され、中断後に同じ output_dir で再実行すると自動で再開する
     """
     os.makedirs(output_dir, exist_ok=True)
 
@@ -100,8 +109,9 @@ def train_image(
         "--lazy_preprocess",              "True",
         "--gradient_checkpointing",       "True",
         "--dataloader_num_workers",       "4",
-        "--save_strategy",                "epoch",
-        "--save_only_model",              "True",
+        "--save_strategy",                "steps",
+        "--save_steps",                   str(save_steps),
+        "--save_total_limit",             "1",   # 最新の checkpoint-N だけ残す（旧版は自動削除）
         "--tune_mm_mlp_adapter",          str(tune_mm_mlp_adapter),
         "--report_to",                    "tensorboard",
     ]
@@ -137,6 +147,7 @@ def train_audio(
     grad_accum: int = 4,
     num_epochs: int = 1,
     num_gpus: int = 1,
+    save_steps: int = 500,
 ) -> None:
     """
     音声モダリティの学習を実行する（Phase2・Step2b で共用）。
@@ -165,6 +176,8 @@ def train_audio(
         grad_accum            : 勾配累積ステップ数
         num_epochs            : エポック数
         num_gpus              : GPU 数
+        save_steps            : 途中保存の間隔（最適化ステップ数）。output_dir/checkpoint-N に
+                                保存され、中断後に同じ output_dir で再実行すると自動で再開する
     """
     os.makedirs(output_dir, exist_ok=True)
 
@@ -194,8 +207,9 @@ def train_audio(
         "--lazy_preprocess",              "True",
         "--gradient_checkpointing",       "True",
         "--dataloader_num_workers",       "4",
-        "--save_strategy",                "epoch",
-        "--save_only_model",              "True",
+        "--save_strategy",                "steps",
+        "--save_steps",                   str(save_steps),
+        "--save_total_limit",             "1",   # 最新の checkpoint-N だけ残す（旧版は自動削除）
         "--report_to",                    "tensorboard",
     ]
 
