@@ -354,8 +354,8 @@ if __name__ == "__main__":
             lora_enable         = False,
             lr                  = 1e-3,       # 論文 Table 9: Pre-Training のコネクタ学習率
             mm_projector_lr     = 1e-3,
-            batch_size          = 16,
-            grad_accum          = 8,          # 16 × 8 = 128（論文 Table 9: Pre-Training バッチ128。batch 32はRTX 4090 24GBでOOM）
+            batch_size          = 8,
+            grad_accum          = 16,         # 8 × 16 = 128（論文 Table 9: Pre-Training バッチ128。RTX 4090 24GBではbatch 16でもlogits(語彙15万)でOOM）
             num_gpus            = config.NUM_GPUS,
         )
     # 学習をスキップした場合も含め毎回冪等にチェックする（_already_doneの外側）
@@ -411,8 +411,8 @@ if __name__ == "__main__":
             lora_enable           = False,
             lr                    = 1e-3,     # 論文 Table 9: Pre-Training のコネクタ学習率
             mm_projector_lr       = 1e-3,
-            batch_size            = 16,
-            grad_accum            = 8,        # 16 × 8 = 128（論文 Table 9: Pre-Training バッチ128。batch 32はRTX 4090 24GBでOOM）
+            batch_size            = 8,
+            grad_accum            = 16,       # 8 × 16 = 128（論文 Table 9: Pre-Training バッチ128。RTX 4090 24GBではbatch 16でもlogits(語彙15万)でOOM）
             num_gpus              = config.NUM_GPUS,
         )
     # 学習をスキップした場合も含め毎回冪等にチェックする（_already_doneの外側）
