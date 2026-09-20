@@ -81,7 +81,7 @@ def train_image(
         "--vision_tower",                 vision_tower,
         "--mm_vision_select_layer",       "-2",
         "--image_aspect_ratio",           "pad",
-        "--num_frames",                   "16",
+        "--num_frames",                   "1",   # 画像のみ使用。16だと同一画像を16枚に複製してSigLIPに通す（結果は平均で同一・計算16倍）ためRTX 4090でOOM
         "--data_path",                    data_json,
         "--data_folder",                  data_folder,
         "--output_dir",                   output_dir,
