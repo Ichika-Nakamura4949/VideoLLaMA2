@@ -174,10 +174,18 @@ def _merge_lora_and_save(base_path: str, lora_path: str, save_path: str) -> None
     )
 
     # コネクタなど LoRA 対象外の更新済み重みを適用
+    # キーは PeftModel 基準（base_model.model.model.mm_projector.weight）なので、素のモデルに
+    # 読ませる前に接頭辞を剥がす（上流 videollama2/model/__init__.py と同じ処理）。
+    # 剥がさないと全件 unexpected として黙って無視され、Phase1/2 で学習した projector が捨てられる
     non_lora_path = os.path.join(lora_path, "non_lora_trainables.bin")
     if os.path.exists(non_lora_path):
         extra = torch.load(non_lora_path, map_location="cpu")
-        model.load_state_dict(extra, strict=False)
+        extra = {(k[len("base_model."):] if k.startswith("base_model.") else k): v for k, v in extra.items()}
+        if any(k.startswith("model.model.") for k in extra):
+            extra = {(k[len("model."):] if k.startswith("model.") else k): v for k, v in extra.items()}
+        missing, unexpected = model.load_state_dict(extra, strict=False)
+        assert not unexpected, f"non_lora_trainables.bin のキーがモデルと一致しない: {unexpected[:5]}"
+        print(f"[lora_merge] non_lora_trainables.bin から {len(extra)} tensors を適用")
 
     # LoRA adapter をマージして完全モデルに変換
     model = PeftModel.from_pretrained(model, lora_path)
