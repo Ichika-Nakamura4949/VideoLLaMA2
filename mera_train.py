@@ -62,6 +62,7 @@ Qwen2.5-1.5B（config.LLM_BACKBONE）に差し替えたため、Phase1の前に
 """
 
 import glob
+import json
 import os
 import shutil
 import sys
@@ -125,9 +126,21 @@ def _prune_incomplete_checkpoints(path: str) -> None:
     これが無いものを不完全とみなして落とし、直前の正常な checkpoint から再開させる。
     """
     for ckpt in glob.glob(os.path.join(path, "checkpoint-*")):
-        if os.path.isdir(ckpt) and not os.path.exists(os.path.join(ckpt, "trainer_state.json")):
+        if os.path.isdir(ckpt) and not _is_complete_checkpoint(ckpt):
             shutil.rmtree(ckpt, ignore_errors=True)
             print(f"[cleanup] 不完全な途中保存を削除: {ckpt}")
+
+
+def _is_complete_checkpoint(ckpt: str) -> bool:
+    """trainer_state.json が JSON として読め、global_step がフォルダ名の N と一致すれば完了とみなす。
+    存在チェックだけだと、書き込み途中で落ちた 0 バイト／途中で切れた JSON を完了と誤認する。"""
+    try:
+        with open(os.path.join(ckpt, "trainer_state.json")) as f:
+            state = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return False
+    step = int(os.path.basename(ckpt).split("-")[-1])
+    return state.get("global_step") == step
 
 
 # ── LoRA マージ補助関数 ────────────────────────────────────────────────────────

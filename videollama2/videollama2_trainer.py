@@ -456,9 +456,16 @@ class VideoLLaMA2Trainer(Trainer):
             weights = {k.split('mm_projector.')[1]: v for k, v in weights.items() if 'mm_projector.' in k}
             # named_parameters 由来なので buffer を含まない。projector が BatchNorm 等を持つ型でも
             # 読めるよう strict=False（buffer は凍結・不変）。余分なキーだけは異常として弾く
-            missing, unexpected = model.get_model().mm_projector.load_state_dict(weights, strict=False)
-            assert not unexpected, f"mm_projector.bin に想定外のキー: {unexpected}"
-            logger.info(f"Loaded mm_projector from {path} (adapter-only resume).")
+            projector = model.get_model().mm_projector
+            missing, unexpected = projector.load_state_dict(weights, strict=False)
+            # strict=False で「何も読めていないのに通過」しないよう、パラメータの欠落だけは弾く
+            assert weights, f"{path} から mm_projector のキーを1件も抽出できなかった"
+            assert not unexpected, f"{path} に想定外のキー: {unexpected}"
+            param_names = {n for n, _ in projector.named_parameters()}
+            missing_params = [k for k in missing if k in param_names]
+            assert not missing_params, f"{path} にパラメータが不足: {missing_params}"
+            # logger.info は既定 verbosity(WARNING) で出ないため print で残す
+            print(f"[resume] Loaded mm_projector from {path} (adapter-only resume, {len(weights)} tensors).")
         else:
             super(VideoLLaMA2Trainer, self)._load_from_checkpoint(resume_from_checkpoint, model)
 

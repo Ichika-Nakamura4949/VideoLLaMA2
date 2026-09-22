@@ -54,6 +54,7 @@ def train_image(
     num_epochs: int = 1,
     num_gpus: int = 1,
     save_steps: int = 500,
+    logging_steps: int = 500,
 ) -> None:
     """
     画像モダリティの学習を実行する（Phase1・Step2a で共用）。
@@ -77,6 +78,7 @@ def train_image(
         num_gpus            : GPU 数
         save_steps          : 途中保存の間隔（最適化ステップ数）。output_dir/checkpoint-N に
                               保存され、中断後に同じ output_dir で再実行すると自動で再開する
+        logging_steps       : loss/学習率を trainer_state.json の log_history に記録する間隔
     """
     os.makedirs(output_dir, exist_ok=True)
 
@@ -112,6 +114,7 @@ def train_image(
         "--save_strategy",                "steps",
         "--save_steps",                   str(save_steps),
         "--save_total_limit",             "1",   # 最新の checkpoint-N だけ残す（旧版は自動削除）
+        "--logging_steps",                str(logging_steps),
         "--tune_mm_mlp_adapter",          str(tune_mm_mlp_adapter),
         "--report_to",                    "tensorboard",
     ]
@@ -148,6 +151,7 @@ def train_audio(
     num_epochs: int = 1,
     num_gpus: int = 1,
     save_steps: int = 500,
+    logging_steps: int = 500,
 ) -> None:
     """
     音声モダリティの学習を実行する（Phase2・Step2b で共用）。
@@ -178,6 +182,7 @@ def train_audio(
         num_gpus              : GPU 数
         save_steps            : 途中保存の間隔（最適化ステップ数）。output_dir/checkpoint-N に
                                 保存され、中断後に同じ output_dir で再実行すると自動で再開する
+        logging_steps         : loss/学習率を trainer_state.json の log_history に記録する間隔
     """
     os.makedirs(output_dir, exist_ok=True)
 
@@ -210,6 +215,7 @@ def train_audio(
         "--save_strategy",                "steps",
         "--save_steps",                   str(save_steps),
         "--save_total_limit",             "1",   # 最新の checkpoint-N だけ残す（旧版は自動削除）
+        "--logging_steps",                str(logging_steps),
         "--report_to",                    "tensorboard",
     ]
 
